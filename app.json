@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Morsel",
-    "slug": "Morsel",
+    "slug": "morsel",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -15,16 +15,24 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.morsell.morsel"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.morsell.morsel"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "219a9f0c-d331-404c-b5f8-3ed4d24b6702"
+      }
+    },
+    "owner": "morsell"
   }
 }
