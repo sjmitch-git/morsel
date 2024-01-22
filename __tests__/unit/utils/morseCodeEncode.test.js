@@ -1,4 +1,4 @@
-import { morseCodeEncode } from "@/utils/morseCodeEncode";
+import { morseCodeEncode } from "@/utils/morseCode/morseCodeEncode";
 
 describe("morseCodeEncode", () => {
   it('encodes "Hello" correctly', () => {
