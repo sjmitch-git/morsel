@@ -3,7 +3,7 @@ import {
   reversedMorseCodeDictionary,
   morseCodeDecode,
   morseCodeEncode,
-} from "@/services/morseCodeService";
+} from "@/services/morseCode.service";
 
 describe("Morse Code Service", () => {
   it("encodes and decodes correctly", () => {
