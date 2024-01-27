@@ -4,23 +4,112 @@ exports[`renders App component correctly 1`] = `
 <View
   style={
     {
-      "alignItems": "center",
-      "backgroundColor": "#f0f0f0",
+      "backgroundColor": "#ecf0f1",
       "flex": 1,
-      "justifyContent": "center",
     }
   }
 >
-  <Text
+  <View
     style={
       {
-        "color": "#333",
-        "fontSize": 20,
-        "fontWeight": "bold",
+        "alignItems": "center",
+        "backgroundColor": "grey",
+        "height": "15%",
+        "justifyContent": "center",
+        "width": "100%",
       }
     }
   >
-    Hello, React Native!
-  </Text>
+    <Text>
+      Header Component
+    </Text>
+  </View>
+  <View
+    style={
+      {
+        "flex": 1,
+        "padding": 15,
+      }
+    }
+  >
+    <View
+      style={
+        {
+          "alignItems": "center",
+          "flex": 1,
+          "justifyContent": "center",
+        }
+      }
+    >
+      <Text
+        style={
+          {
+            "fontSize": 20,
+            "fontWeight": "bold",
+          }
+        }
+      >
+        Home Screen!
+      </Text>
+      <View
+        accessibilityState={
+          {
+            "busy": undefined,
+            "checked": undefined,
+            "disabled": undefined,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        collapsable={false}
+        focusable={true}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          [
+            {
+              "borderRadius": 5,
+              "padding": 10,
+            },
+            {
+              "borderRadius": 5,
+              "padding": 10,
+            },
+            {
+              "backgroundColor": "#3498db",
+            },
+            null,
+          ]
+        }
+      >
+        <Text
+          style={
+            {
+              "color": "white",
+              "fontSize": 16,
+            }
+          }
+        >
+          Send my Location
+        </Text>
+      </View>
+    </View>
+  </View>
 </View>
 `;

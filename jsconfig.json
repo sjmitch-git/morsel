@@ -2,10 +2,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/constants/*": ["src/constants/*"],
-      "@/services/*": ["src/services/*"],
-      "@/utils/*": ["src/utils/*"],
-      "@/mocks/*": ["src/__mocks__/*"]
+      "@/*": ["src/*"]
     }
   }
 }

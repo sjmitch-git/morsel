@@ -4,7 +4,7 @@ export function getUserLocation() {
   return new Promise((resolve, reject) => {
     checkGPSAvailability()
       .then((result) => {
-        if (result.available && result.permission) {
+        if (result.available) {
           navigator.geolocation.getCurrentPosition(
             (position) => {
               const { latitude, longitude } = position.coords;
@@ -15,7 +15,8 @@ export function getUserLocation() {
             }
           );
         } else {
-          reject("GPS is not available or permission is denied.");
+          console.log("GPS is not available.");
+          reject("GPS is not available.");
         }
       })
       .catch(() => {

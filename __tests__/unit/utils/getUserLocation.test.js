@@ -22,10 +22,12 @@ describe("getUserLocation", () => {
 
   it("should reject with an error message when GPS permission is denied", async () => {
     mockNavigator.permissions.query.mockResolvedValue({ state: "denied" });
+    mockNavigator.geolocation.getCurrentPosition.mockImplementationOnce((_, errorCallback) => {
+      const error = new Error("GPS permission is denied.");
+      errorCallback(error);
+    });
 
-    await expect(getUserLocation()).rejects.toMatch(
-      "GPS is not available or permission is denied."
-    );
+    await expect(getUserLocation()).rejects.toMatch("GPS permission is denied.");
   });
 
   it("should reject with an error message when GPS is not available", async () => {

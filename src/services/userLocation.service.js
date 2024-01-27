@@ -1,3 +1,7 @@
-import { checkGPSAvailability, getUserLocation } from "@/utils/userLocationUtils";
+import {
+  checkGPSAvailability,
+  getUserLocation,
+  userLocationMessage,
+} from "@/utils/userLocationUtils";
 
-export { checkGPSAvailability, getUserLocation };
+export { checkGPSAvailability, getUserLocation, userLocationMessage };

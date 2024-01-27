@@ -10,8 +10,8 @@ it("renders correctly", () => {
 test("renders App component correctly", () => {
   const component = renderer.create(<App />);
   const instance = component.root;
-  const helloText = instance.findByProps({ children: "Hello, React Native!" });
-  expect(helloText).toBeTruthy();
+  const text = instance.findByProps({ children: "Home Screen!" });
+  expect(text).toBeTruthy();
 });
 
 test("renders App component correctly", () => {

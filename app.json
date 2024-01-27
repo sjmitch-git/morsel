@@ -11,9 +11,10 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
+    "experiments": {
+      "tsconfigPaths": true
+    },
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.morsell.morsel"
