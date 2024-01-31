@@ -1,13 +1,13 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
+import { ScrollView, View, StyleSheet } from "react-native";
 import Header from "@/structure/Header";
 
 const Layout = ({ children }) => {
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Header />
       <View style={styles.content}>{children}</View>
-    </View>
+    </ScrollView>
   );
 };
 

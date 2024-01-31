@@ -1,4 +1,4 @@
-import { checkGPSAvailability } from "./checkGPSAvailability";
+/* import { checkGPSAvailability } from "./checkGPSAvailability";
 
 export function getUserLocation() {
   return new Promise((resolve, reject) => {
@@ -15,7 +15,6 @@ export function getUserLocation() {
             }
           );
         } else {
-          console.log("GPS is not available.");
           reject("GPS is not available.");
         }
       })
@@ -23,4 +22,22 @@ export function getUserLocation() {
         reject("Error checking GPS availability.");
       });
   });
+}
+ */
+
+import * as Location from "expo-location";
+
+export async function getUserLocation() {
+  try {
+    const { status } = await Location.requestForegroundPermissionsAsync();
+
+    if (status !== "granted") {
+      throw new Error("Location permission not granted");
+    }
+
+    const location = await Location.getCurrentPositionAsync({});
+    return { latitude: location.coords.latitude, longitude: location.coords.longitude };
+  } catch (error) {
+    throw new Error(`Error getting user location: ${error.message}`);
+  }
 }

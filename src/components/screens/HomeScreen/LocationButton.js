@@ -1,6 +1,5 @@
 import React from "react";
 import { getUserLocation, userLocationMessage } from "@/services/userLocation.service";
-import { morseCodeEncode, morseCodeDecode } from "@/services/morseCode.service";
 import { Button } from "@/ui";
 
 const LocationButton = () => {
@@ -8,19 +7,13 @@ const LocationButton = () => {
     try {
       const coordinates = await getUserLocation();
       const message = userLocationMessage(coordinates.latitude, coordinates.longitude);
-      console.log(message);
-      console.log(morseCodeEncode(message));
-      console.log(
-        morseCodeDecode(
-          "-.-. --- --- .-. -.. .. -. .- - . ... ---...   .-.. .- - .. - ..- -.. . ---...   ..... ...-- .-.-.- ....- ..... ....- ....- ...-- ---.. ....- --..--   .-.. --- -. --. .. - ..- -.. . ---...   -...- ..--- .-.-.- --... ..--- -.... ..--- ----. --... -...."
-        )
-      );
+      alert(message);
     } catch (error) {
-      console.error(error);
+      console.error(error.message);
     }
   };
 
-  return <Button onPress={handlePress} label="Send my Location" primary="primary" />;
+  return <Button onPress={handlePress} label="Send my Location" state="primary" />;
 };
 
 export default LocationButton;

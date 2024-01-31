@@ -4,7 +4,7 @@ import { Text, View, StyleSheet } from "react-native";
 export default function Header() {
   return (
     <View style={styles.header}>
-      <Text>Header Component</Text>
+      <Text>MORSEL</Text>
     </View>
   );
 }

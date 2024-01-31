@@ -34,6 +34,21 @@
         "projectId": "219a9f0c-d331-404c-b5f8-3ed4d24b6702"
       }
     },
-    "owner": "morsell"
+    "plugins": [
+      [
+        "@rnmapbox/maps",
+        {
+          "RNMapboxMapsDownloadToken": "sk.eyJ1Ijoic2ptaXRjaCIsImEiOiJjbHJ3aHV4OWkwcXhyMmtvNjh6dnNqYzVrIn0.Yk-QstmBmVcnLjbByB6uzw",
+          "RNMapboxMapsImpl": "mapbox-gl"
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
+        }
+      ]
+    ],
+    "owner": "sjmitch"
   }
 }
