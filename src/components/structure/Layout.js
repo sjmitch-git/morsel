@@ -5,7 +5,7 @@ import Header from "@/structure/Header";
 const Layout = ({ children }) => {
   return (
     <ScrollView style={styles.container}>
-      <Header />
+      {/* <Header /> */}
       <View style={styles.content}>{children}</View>
     </ScrollView>
   );

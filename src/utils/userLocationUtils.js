@@ -1,5 +1,5 @@
-import { checkGPSAvailability } from "./userLocation/checkGPSAvailability";
 import { getUserLocation } from "./userLocation/getUserLocation";
 import { userLocationMessage } from "./userLocation/userLocationMessage";
+import { getStoredUserLocation, storeUserLocation } from "./userLocation/storeUserLocation";
 
-export { checkGPSAvailability, getUserLocation, userLocationMessage };
+export { getUserLocation, userLocationMessage, getStoredUserLocation, storeUserLocation };

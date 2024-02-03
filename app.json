@@ -39,13 +39,14 @@
         "@rnmapbox/maps",
         {
           "RNMapboxMapsDownloadToken": "sk.eyJ1Ijoic2ptaXRjaCIsImEiOiJjbHJ3aHV4OWkwcXhyMmtvNjh6dnNqYzVrIn0.Yk-QstmBmVcnLjbByB6uzw",
-          "RNMapboxMapsImpl": "mapbox-gl"
+          "RNMapboxMapsVersion": "10.1.8"
         }
       ],
       [
         "expo-location",
         {
-          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
+          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location.",
+          "locationWhenInUsePermission": "Show current location on map."
         }
       ]
     ],

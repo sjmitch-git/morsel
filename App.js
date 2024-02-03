@@ -1,13 +1,8 @@
 import React from "react";
-import Layout from "@/structure/Layout";
-import HomeScreen from "@/screens/HomeScreen";
+import Navigation from "@/navigation/Navigation";
 
 const App = () => {
-  return (
-    <Layout>
-      <HomeScreen />
-    </Layout>
-  );
+  return <Navigation />;
 };
 
 export default App;

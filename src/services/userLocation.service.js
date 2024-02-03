@@ -1,7 +1,8 @@
 import {
-  checkGPSAvailability,
   getUserLocation,
   userLocationMessage,
+  getStoredUserLocation,
+  storeUserLocation,
 } from "@/utils/userLocationUtils";
 
-export { checkGPSAvailability, getUserLocation, userLocationMessage };
+export { getUserLocation, userLocationMessage, getStoredUserLocation, storeUserLocation };

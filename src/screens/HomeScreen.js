@@ -21,13 +21,43 @@ import {
   Br,
   TextArea,
 } from "@/ui";
-// import Constants from "expo-constants";
-/* import MapboxGL from "@rnmapbox/maps";
-MapboxGL.setAccessToken(
+import Mapbox from "@rnmapbox/maps";
+Mapbox.setConnected(true);
+Mapbox.setAccessToken(
   "pk.eyJ1Ijoic2ptaXRjaCIsImEiOiJjbHJ3NWE3MWkwazNvMmtteGM2cjIzdGQ5In0.gMlErk6m58nEM4SK9FgdqA"
-); */
+);
+const defaultStyle = {
+  version: 8,
+  name: "Land",
+  sources: {
+    map: {
+      type: "raster",
+      tiles: ["https://a.tile.openstreetmap.org/{z}/{x}/{y}.png"],
+      tileSize: 256,
+      minzoom: 1,
+      maxzoom: 19,
+    },
+  },
+  layers: [
+    {
+      id: "background",
+      type: "background",
+      paint: {
+        "background-color": "#f2efea",
+      },
+    },
+    {
+      id: "map",
+      type: "raster",
+      source: "map",
+      paint: {
+        "raster-fade-duration": 100,
+      },
+    },
+  ],
+};
 const HomeScreen = () => {
-  // console.log("Mapbox", MapboxGL);
+  console.log("Mapbox", MapboxGL);
   return (
     <View style={styles.container}>
       <H1>
@@ -63,6 +93,9 @@ const HomeScreen = () => {
       </P>
       <TextArea multiline rows={5} placeholder="placeholder text" />
       <LocationButton />
+      <View style={styles.map_container}>
+        <Mapbox.MapView style={styles.map} styleJSON={JSON.stringify(defaultStyle)} />
+      </View>
       <P>
         My Bonnie lies over the ocean.
         <Br />
@@ -87,8 +120,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   map_container: {
-    height: 300,
-    width: 300,
+    height: 700,
+    width: 390,
   },
   map: {
     flex: 1,

@@ -1,30 +1,3 @@
-/* import { checkGPSAvailability } from "./checkGPSAvailability";
-
-export function getUserLocation() {
-  return new Promise((resolve, reject) => {
-    checkGPSAvailability()
-      .then((result) => {
-        if (result.available) {
-          navigator.geolocation.getCurrentPosition(
-            (position) => {
-              const { latitude, longitude } = position.coords;
-              resolve({ latitude, longitude });
-            },
-            (error) => {
-              reject(`Error getting user location: ${error.message}`);
-            }
-          );
-        } else {
-          reject("GPS is not available.");
-        }
-      })
-      .catch(() => {
-        reject("Error checking GPS availability.");
-      });
-  });
-}
- */
-
 import * as Location from "expo-location";
 
 export async function getUserLocation() {

@@ -1,5 +1,10 @@
 import React from "react";
-import { getUserLocation, userLocationMessage } from "@/services/userLocation.service";
+import {
+  getUserLocation,
+  userLocationMessage,
+  storeUserLocation,
+} from "@/services/userLocation.service";
+import { getMessages, saveMessages, formatMessage } from "@/services/messenger.service";
 import { Button } from "@/ui";
 
 const LocationButton = () => {
@@ -7,7 +12,12 @@ const LocationButton = () => {
     try {
       const coordinates = await getUserLocation();
       const message = userLocationMessage(coordinates.latitude, coordinates.longitude);
-      alert(message);
+      storeUserLocation(coordinates.latitude, coordinates.longitude);
+      const existingMessages = await getMessages();
+      const updatedMessages = [...existingMessages, formatMessage(message)];
+      saveMessages(updatedMessages);
+      const allMessages = await getMessages();
+      console.log(allMessages);
     } catch (error) {
       console.error(error.message);
     }
