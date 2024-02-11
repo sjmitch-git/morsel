@@ -1,10 +1,10 @@
 import React from "react";
 import { Text } from "react-native";
-import { globalStyles } from "@/themes";
+import { HeadingStyles } from "@/styles";
 
 const H1 = ({ children, style }) => {
   return (
-    <Text style={[globalStyles.h1, style]} role="heading" aria-level="1">
+    <Text style={[HeadingStyles.h1, style]} role="heading" aria-level="1">
       {children}
     </Text>
   );
@@ -12,7 +12,7 @@ const H1 = ({ children, style }) => {
 
 const H2 = ({ children, style }) => {
   return (
-    <Text style={[globalStyles.h2, style]} role="heading" aria-level="2">
+    <Text style={[HeadingStyles.h2, style]} role="heading" aria-level="2">
       {children}
     </Text>
   );
@@ -20,7 +20,7 @@ const H2 = ({ children, style }) => {
 
 const H3 = ({ children, style }) => {
   return (
-    <Text style={[globalStyles.h3, style]} role="heading" aria-level="3">
+    <Text style={[HeadingStyles.h3, style]} role="heading" aria-level="3">
       {children}
     </Text>
   );
@@ -28,7 +28,7 @@ const H3 = ({ children, style }) => {
 
 const H4 = ({ children, style }) => {
   return (
-    <Text style={[globalStyles.h4, style]} role="heading" aria-level="4">
+    <Text style={[HeadingStyles.h4, style]} role="heading" aria-level="4">
       {children}
     </Text>
   );

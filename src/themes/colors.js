@@ -3,6 +3,7 @@ const colors = {
   secondary: "#2ecc71",
   background: "#ecf0f1",
   text: "#2c3e50",
+  light: "#fafafa",
 };
 
 export default colors;

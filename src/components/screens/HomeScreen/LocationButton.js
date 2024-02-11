@@ -17,7 +17,6 @@ const LocationButton = () => {
       const updatedMessages = [...existingMessages, formatMessage(message)];
       saveMessages(updatedMessages);
       const allMessages = await getMessages();
-      console.log(allMessages);
     } catch (error) {
       console.error(error.message);
     }

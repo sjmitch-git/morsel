@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import LocationButton from "@/components/screens/HomeScreen/LocationButton";
 import {
   H1,
@@ -21,11 +21,11 @@ import {
   Br,
   TextArea,
 } from "@/ui";
-import Mapbox from "@rnmapbox/maps";
+/* import Mapbox from "@rnmapbox/maps";
 Mapbox.setConnected(true);
 Mapbox.setAccessToken(
   "pk.eyJ1Ijoic2ptaXRjaCIsImEiOiJjbHJ3NWE3MWkwazNvMmtteGM2cjIzdGQ5In0.gMlErk6m58nEM4SK9FgdqA"
-);
+); */
 const defaultStyle = {
   version: 8,
   name: "Land",
@@ -57,7 +57,7 @@ const defaultStyle = {
   ],
 };
 const HomeScreen = () => {
-  console.log("Mapbox", MapboxGL);
+  // console.log("Mapbox", MapboxGL);
   return (
     <View style={styles.container}>
       <H1>
@@ -66,45 +66,11 @@ const HomeScreen = () => {
       <H2>
         Home Screen! <Small>some small text</Small>
       </H2>
-      <P>
-        This is a <Strong>strong</Strong> and <Em>emphasized</Em>{" "}
-        <Strong style={{ color: "red" }}>paragraph</Strong>.
-      </P>
-      <P>
-        This is a <Strong>strong</Strong> and <Em>emphasized</Em>{" "}
-        <Span style={{ color: "red" }}>paragraph</Span>.
-      </P>
-      <Hr style="dashed" />
-      <P>
-        This is a <Strong>strong</Strong> and <Em>emphasized</Em> text. Also, a <Small>small</Small>{" "}
-        text. Here's a <Mark>marked</Mark> section. Additionally, there is a <Del>deleted</Del> and
-        an <Ins>inserted</Ins> text. <Br />
-        You can use <Sub>subscript</Sub> and <Sup>superscript</Sup> text. Inline <Code>code</Code>{" "}
-        is supported as well. For code blocks:
-      </P>
-      <Pre>
-        {`function add(a, b) {
-  return a + b;
-}
-`}
-      </Pre>
-      <P>
-        Lastly, you can underline text using <U>underline</U>.
-      </P>
       <TextArea multiline rows={5} placeholder="placeholder text" />
       <LocationButton />
-      <View style={styles.map_container}>
+      {/*  <View style={styles.map_container}>
         <Mapbox.MapView style={styles.map} styleJSON={JSON.stringify(defaultStyle)} />
-      </View>
-      <P>
-        My Bonnie lies over the ocean.
-        <Br />
-        My Bonnie lies over the sea.
-        <Br />
-        My Bonnie lies over the ocean.
-        <Br />
-        Oh, bring back my Bonnie to me.
-      </P>
+      </View> */}
     </View>
   );
 };
@@ -112,7 +78,7 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: "start",
     alignItems: "center",
   },
   text: {

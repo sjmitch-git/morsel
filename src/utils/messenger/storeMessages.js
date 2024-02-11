@@ -5,6 +5,7 @@ const saveMessages = async (messages) => {
     await AsyncStorage.setItem("messages", JSON.stringify(messages));
   } catch (error) {
     console.error("Error saving messages:", error);
+    throw new Error("Error saving messages");
   }
 };
 
@@ -14,7 +15,7 @@ const getMessages = async () => {
     return storedMessages ? JSON.parse(storedMessages) : [];
   } catch (error) {
     console.error("Error getting messages:", error);
-    return [];
+    throw new Error("Failed to retrieve messages");
   }
 };
 
@@ -23,6 +24,7 @@ const clearMessages = async () => {
     await AsyncStorage.removeItem("messages");
   } catch (error) {
     console.error("Error clearing messages:", error);
+    throw new Error("Error clearing messages");
   }
 };
 
@@ -36,6 +38,7 @@ const clearMessage = async (timestamp) => {
     await AsyncStorage.setItem("messages", JSON.stringify(messages));
   } catch (error) {
     console.error("Error clearing message:", error);
+    throw new Error("Error clearing message");
   }
 };
 

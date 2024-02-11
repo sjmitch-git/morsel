@@ -17,6 +17,7 @@ const globalStyles = StyleSheet.create({
   button: {
     borderRadius: 5,
     padding: 10,
+    textAlign: "center",
   },
   input: {
     borderColor: "gray",
@@ -24,24 +25,28 @@ const globalStyles = StyleSheet.create({
     padding: 8,
   },
   inputFocused: {
-    borderColor: "blue", // Change the color as needed
+    borderColor: "blue",
   },
   h1: {
     fontSize: 30,
     fontWeight: "bold",
     marginBottom: 10,
+    textTransform: "capitalize",
   },
   h2: {
     fontSize: 24,
     fontWeight: "bold",
+    textTransform: "capitalize",
   },
   h3: {
     fontSize: 20,
     fontWeight: "bold",
+    textTransform: "capitalize",
   },
   h4: {
     fontSize: 18,
     fontWeight: "bold",
+    textTransform: "capitalize",
   },
 });
 

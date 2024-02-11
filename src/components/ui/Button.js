@@ -1,20 +1,32 @@
 import React, { useState } from "react";
-import { Pressable, Text, StyleSheet } from "react-native";
-import { globalStyles, colors } from "@/themes";
+import { Pressable, Text } from "react-native";
+import { ButtonStyles, Constants } from "@/styles";
 
 const Button = ({ onPress, label, state, disabled }) => {
   const [isPressed, setIsPressed] = useState(false);
+  const labelColor = state ? ButtonStyles.labelLight.color : ButtonStyles.labelDark.color;
+
   const getButtonStyle = () => {
+    const baseStyle = [ButtonStyles.button];
+
     if (disabled) {
-      return [styles.button, styles.disabledButton];
+      return [ButtonStyles.button, ButtonStyles.disabledButton];
     }
     switch (state) {
       case "primary":
-        return [globalStyles.button, styles.primaryButton];
+        return [...baseStyle, ButtonStyles.primaryButton];
       case "secondary":
-        return [globalStyles.button, styles.secondaryButton];
+        return [...baseStyle, ButtonStyles.secondaryButton];
+      case "info":
+        return [...baseStyle, ButtonStyles.infoButton];
+      case "warning":
+        return [...baseStyle, ButtonStyles.warningButton];
+      case "success":
+        return [...baseStyle, ButtonStyles.successButton];
+      case "danger":
+        return [...baseStyle, ButtonStyles.dangerButton];
       default:
-        return [globalStyles.button, styles.primaryButton];
+        return [...baseStyle, ButtonStyles.defaultButton];
     }
   };
 
@@ -29,42 +41,17 @@ const Button = ({ onPress, label, state, disabled }) => {
   return (
     <Pressable
       style={({ pressed }) => [
-        styles.button,
         ...getButtonStyle(),
-        pressed || isPressed ? styles.pressedButton : null,
+        pressed || isPressed ? ButtonStyles.pressedButton : null,
       ]}
       onPress={onPress}
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
       role="button"
     >
-      <Text style={styles.label}>{label}</Text>
+      <Text style={[ButtonStyles.label, { color: labelColor }]}>{label}</Text>
     </Pressable>
   );
 };
-
-const styles = StyleSheet.create({
-  button: {
-    borderRadius: 5,
-    padding: 10,
-  },
-  primaryButton: {
-    backgroundColor: colors.primary,
-  },
-  secondaryButton: {
-    backgroundColor: colors.secondary,
-  },
-  pressedButton: {
-    opacity: 0.8, // Change the opacity when pressed
-  },
-  disabledButton: {
-    backgroundColor: colors.disabled,
-    // Add other styles for disabled state
-  },
-  label: {
-    color: "white",
-    fontSize: 16,
-  },
-});
 
 export { Button };
