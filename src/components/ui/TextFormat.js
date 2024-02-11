@@ -1,14 +1,16 @@
 import React from "react";
 import { Text, StyleSheet, View } from "react-native";
 import { globalStyles } from "@/themes";
+import { Constants } from "@/styles";
 
 const P = ({
   style,
   children,
-  fontSize = globalStyles.baseText.fontSize,
-  textAlign = globalStyles.baseText.textAlign,
+  fontSize = Constants.baseFontSize,
+  textAlign = Constants.baseTextAlign,
   marginBottom = 10,
-  lineHeight = globalStyles.baseText.lineHeight,
+  lineHeight = Constants.baseLineHeight,
+  fontFamily = Constants.fontSansSerif,
 }) => {
   const styles = StyleSheet.create({
     paragraph: {
@@ -16,6 +18,7 @@ const P = ({
       textAlign: textAlign,
       marginBottom: marginBottom,
       lineHeight: lineHeight,
+      fontFamily: fontFamily,
     },
   });
   return <Text style={[styles.paragraph, style]}>{children}</Text>;
@@ -52,7 +55,7 @@ const Small = ({ style, children }) => {
   return <Text style={[styles.small, style]}>{children}</Text>;
 };
 
-const Mark = ({ style, children, bg = "yellow" }) => {
+const Mark = ({ style, children, bg = Constants.accentColor }) => {
   const styles = StyleSheet.create({
     mark: {
       backgroundColor: bg,
@@ -102,7 +105,7 @@ const Sup = ({ style, children }) => {
 const Code = ({ style, children, bg = "#ccc", color = "#000" }) => {
   const styles = StyleSheet.create({
     code: {
-      fontFamily: "monospace",
+      fontFamily: Constants.fontMono,
       color: color,
       backgroundColor: bg,
     },
@@ -121,7 +124,7 @@ const Pre = ({
 }) => {
   const styles = StyleSheet.create({
     pre: {
-      fontFamily: "monospace",
+      fontFamily: Constants.fontMono,
       color: color,
       backgroundColor: bg,
       padding: padding,

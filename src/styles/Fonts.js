@@ -1,7 +1,9 @@
+import { Platform } from "react-native";
+
 const Fonts = {
-  sansSerif:
-    '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif',
-  serif: 'Georgia, "Times New Roman", Times, serif',
+  sans: Platform.OS === "web" ? "sans-serif" : Platform.OS === "ios" ? "System" : "Roboto",
+  serif: Platform.OS === "web" ? "serif" : Platform.OS === "ios" ? "Times New Roman" : "serif",
+  mono: Platform.OS === "web" ? "monospace" : Platform.OS === "ios" ? "Courier New" : "monospace",
 };
 
 export default Fonts;

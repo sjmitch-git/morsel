@@ -59,8 +59,9 @@ const Constants = {
   shadowRadius: 2,
 
   // Fonts
-  fontSansSerif: Fonts.sansSerif,
+  fontSansSerif: Fonts.sans,
   fontSerif: Fonts.serif,
+  fontMono: Fonts.mono,
 
   // Buttons
   buttonHeight: 40,

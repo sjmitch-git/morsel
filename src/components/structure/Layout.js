@@ -1,5 +1,5 @@
 import React from "react";
-import { ScrollView, View, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 
 const Layout = ({ children }) => {
   return (
