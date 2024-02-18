@@ -1,17 +1,23 @@
 import React, { useState } from "react";
 import { Pressable, Text } from "react-native";
-import { ButtonStyles, Constants } from "@/styles";
+import { ButtonStyles } from "@/styles";
 
-const Button = ({ onPress, label, state, disabled }) => {
+const Button = ({ onPress, label, state, size = "md", disabled }) => {
   const [isPressed, setIsPressed] = useState(false);
   const labelColor = state ? ButtonStyles.labelLight.color : ButtonStyles.labelDark.color;
 
-  const getButtonStyle = () => {
-    const baseStyle = [ButtonStyles.button];
+  const baseStyle = [
+    ButtonStyles.button,
+    { paddingHorizontal: ButtonStyles[size].paddingHorizontal },
+    { paddingVertical: ButtonStyles[size].paddingVertical },
+    { borderRadius: ButtonStyles[size].borderRadius },
+  ];
 
+  const getButtonStyle = () => {
     if (disabled) {
-      return [ButtonStyles.button, ButtonStyles.disabledButton];
+      return [...baseStyle, ButtonStyles.disabledButton];
     }
+
     switch (state) {
       case "primary":
         return [...baseStyle, ButtonStyles.primaryButton];
@@ -49,7 +55,17 @@ const Button = ({ onPress, label, state, disabled }) => {
       onPressOut={handlePressOut}
       role="button"
     >
-      <Text style={[ButtonStyles.label, { color: labelColor }]}>{label}</Text>
+      <Text
+        style={[
+          ButtonStyles.label,
+          {
+            color: disabled ? ButtonStyles.disabledButton.color : labelColor,
+            fontSize: ButtonStyles[size].fontSize,
+          },
+        ]}
+      >
+        {label}
+      </Text>
     </Pressable>
   );
 };

@@ -3,11 +3,32 @@ import Constants from "./Constants";
 
 const ButtonStyles = StyleSheet.create({
   button: {
-    borderRadius: Constants.buttonBorderRadius,
-    paddingHorizontal: Constants.buttonPaddingHorizontal,
-    height: Constants.buttonHeight,
     justifyContent: "center",
     alignItems: "center",
+  },
+  sm: {
+    fontSize: Constants.buttonFontSize * 0.75,
+    paddingHorizontal: Constants.buttonPaddingHorizontal * 0.75,
+    paddingVertical: Constants.buttonPaddingVertical * 0.75,
+    borderRadius: Constants.buttonBorderRadius * 0.75,
+  },
+  md: {
+    fontSize: Constants.buttonFontSize,
+    paddingHorizontal: Constants.buttonPaddingHorizontal,
+    paddingVertical: Constants.buttonPaddingVertical,
+    borderRadius: Constants.buttonBorderRadius,
+  },
+  lg: {
+    fontSize: Constants.buttonFontSize * 1.25,
+    paddingHorizontal: Constants.buttonPaddingHorizontal * 1.25,
+    paddingVertical: Constants.buttonPaddingVertical * 1.25,
+    borderRadius: Constants.buttonBorderRadius * 1.25,
+  },
+  xl: {
+    fontSize: Constants.buttonFontSize * 1.5,
+    paddingHorizontal: Constants.buttonPaddingHorizontal * 1.5,
+    paddingVertical: Constants.buttonPaddingVertical * 1.5,
+    borderRadius: Constants.buttonBorderRadius * 1.5,
   },
   defaultButton: {
     backgroundColor: Constants.lightColor,
@@ -37,9 +58,9 @@ const ButtonStyles = StyleSheet.create({
   },
   disabledButton: {
     backgroundColor: Constants.disabledColor,
+    color: Constants.disabledLightColor,
   },
   label: {
-    fontSize: Constants.buttonFontSize,
     fontWeight: Constants.buttonFontWeight,
   },
   labelLight: {

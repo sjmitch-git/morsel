@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { TextInput } from "react-native";
 import { globalStyles } from "@/themes";
+import { FormsStyles } from "@/styles";
 
-const TextArea = ({ multiline, rows, placeholder, inputMode = "text", ...rest }) => {
+const TextArea = ({ multiline = true, rows, placeholder, inputMode = "text", ...rest }) => {
   const [isFocused, setIsFocused] = useState(false);
 
   const handleFocus = () => {
@@ -15,7 +16,7 @@ const TextArea = ({ multiline, rows, placeholder, inputMode = "text", ...rest })
 
   return (
     <TextInput
-      style={[globalStyles.input, isFocused && globalStyles.inputFocused]}
+      style={[FormsStyles.input, isFocused && globalStyles.inputFocused]}
       multiline={multiline}
       rows={rows}
       placeholder={placeholder}

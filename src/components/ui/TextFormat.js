@@ -158,8 +158,7 @@ const Hr = ({ color = "#000000", height = 1, marginVertical = 10, style = "solid
       width: "100%",
     },
   });
-
-  return <View style={styles.horizontalRule} />;
+  return <View style={styles.horizontalRule} role="separator" />;
 };
 
 export { P, Span, Em, Strong, Small, Mark, Del, Ins, Sub, Sup, Code, Pre, U, Br, Hr };

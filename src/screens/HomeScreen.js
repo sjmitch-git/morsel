@@ -1,6 +1,5 @@
 import React from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
-import LocationButton from "@/components/screens/HomeScreen/LocationButton";
 import {
   H1,
   H2,
@@ -67,7 +66,7 @@ const HomeScreen = () => {
         Home Screen! <Small>some small text</Small>
       </H2>
       <TextArea multiline rows={5} placeholder="placeholder text" />
-      <LocationButton />
+
       {/*  <View style={styles.map_container}>
         <Mapbox.MapView style={styles.map} styleJSON={JSON.stringify(defaultStyle)} />
       </View> */}

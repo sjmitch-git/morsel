@@ -40,6 +40,7 @@ const Constants = {
   shimLightColor: Colors.opaqueLight,
 
   disabledColor: Colors.midGrey,
+  disabledLightColor: Colors.lighterGrey,
   accentColor: Colors.yellow,
   focusColor: Colors.cyan,
 
@@ -64,9 +65,9 @@ const Constants = {
   fontMono: Fonts.mono,
 
   // Buttons
-  buttonHeight: 40,
-  buttonBorderRadius: 5,
+  buttonBorderRadius: 20,
   buttonPaddingHorizontal: 20,
+  buttonPaddingVertical: 10,
   buttonFontSize: 18,
   buttonFontWeight: 600,
 

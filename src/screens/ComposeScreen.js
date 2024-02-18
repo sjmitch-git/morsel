@@ -14,9 +14,12 @@ const ComposeScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     justifyContent: "start",
     alignItems: "center",
+    width: "100%",
+    borderWidth: 1,
+    borderColor: "orange",
+    borderStyle: "dashed",
   },
 });
 

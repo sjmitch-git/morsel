@@ -89,6 +89,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "start",
     alignItems: "center",
+    width: "100%",
   },
 });
 

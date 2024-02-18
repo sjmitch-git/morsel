@@ -17,21 +17,18 @@ const MessageList = ({ messages, onDeleteMessage }) => {
         />
       )}
       style={styles.listContainer}
-      inverted
     />
   );
 };
 
 const styles = StyleSheet.create({
   listContainer: {
-    flex: 1,
     padding: 16,
     borderWidth: 1,
     borderColor: "orange",
     borderStyle: "dashed",
     maxHeight: 300,
     minWidth: "100%",
-    overflow: "scroll",
   },
 });
 
