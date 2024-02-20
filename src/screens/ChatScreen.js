@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { View, StyleSheet } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
-import { H1, Dialog } from "@/ui";
+import { H1, Dialog, Button } from "@/ui";
 import MessageList from "@/features/messenger/components/MessageList";
-import { getMessages, clearMessage } from "@/services/messenger.service";
+import { getMessages, clearMessage, clearMessages } from "@/services/messenger.service";
 
 const ChatScreen = () => {
   const [messages, setMessages] = useState([]);
@@ -67,10 +67,48 @@ const ChatScreen = () => {
     setShowDialog(false);
   };
 
+  const handleClearAllMessages = () => {
+    setDialogContent({
+      title: "Warning",
+      message: "Clear all messages?",
+      state: "warning",
+      onConfirm: () => {
+        handleConfirmClearAllMessages();
+      },
+      onCancel: () => {
+        handleCancelClearAllMessages();
+      },
+    });
+    setShowDialog(true);
+  };
+
+  const handleConfirmClearAllMessages = async () => {
+    await clearMessages();
+    fetchMessages();
+    setShowDialog(false);
+  };
+
+  const handleCancelClearAllMessages = () => {
+    setShowDialog(false);
+  };
+
   return (
     <View style={styles.container}>
       <H1>Chat Screen!</H1>
-      <MessageList messages={messages} onDeleteMessage={handleDeleteMessage} />
+      {messages.length === 0 ? (
+        <View>
+          <Text>No messages available.</Text>
+        </View>
+      ) : (
+        <>
+          <MessageList messages={messages} onDeleteMessage={handleDeleteMessage} />
+          <Button
+            title="Clear All Messages"
+            onPress={handleClearAllMessages}
+            disabled={messages.length === 0}
+          />
+        </>
+      )}
       <Dialog
         title={dialogContent.title}
         message={dialogContent.message}

@@ -3,7 +3,7 @@ import { TextInput } from "react-native";
 import { globalStyles } from "@/themes";
 import { FormsStyles } from "@/styles";
 
-const TextArea = ({ multiline = true, rows, placeholder, inputMode = "text", ...rest }) => {
+const TextArea = ({ style, multiline = true, rows, placeholder, inputMode = "text", ...rest }) => {
   const [isFocused, setIsFocused] = useState(false);
 
   const handleFocus = () => {
@@ -16,7 +16,7 @@ const TextArea = ({ multiline = true, rows, placeholder, inputMode = "text", ...
 
   return (
     <TextInput
-      style={[FormsStyles.input, isFocused && globalStyles.inputFocused]}
+      style={[style, FormsStyles.input, isFocused && globalStyles.inputFocused]}
       multiline={multiline}
       rows={rows}
       placeholder={placeholder}

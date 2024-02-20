@@ -14,6 +14,8 @@ import {
 const Compose = () => {
   const [message, setMessage] = useState("");
   const [playing, setPlaying] = useState(false);
+  const [loop, setLoop] = useState(1);
+  const [delay, setDelay] = useState(10000);
 
   const setNewMessage = (newMessage) => {
     setMessage((prevMessage) => (prevMessage ? prevMessage + " " + newMessage : newMessage));
@@ -21,7 +23,8 @@ const Compose = () => {
 
   const handleSend = async () => {
     setPlaying(true);
-    transmit(message, 1, 1000);
+    transmit(message, loop, delay, handleStop);
+    saveSendMessage();
   };
 
   const handleStop = () => {
@@ -31,7 +34,7 @@ const Compose = () => {
 
   const saveSendMessage = async () => {
     const existingMessages = await getMessages();
-    const updatedMessages = [...existingMessages, formatMessage(message)];
+    const updatedMessages = [formatMessage(message), ...existingMessages];
     saveMessages(updatedMessages);
   };
 
@@ -46,6 +49,7 @@ const Compose = () => {
         placeholder="Type your message..."
         value={message}
         onChangeText={(text) => setMessage(text)}
+        style={styles.textarea}
       />
       <View style={styles.buttonContainer}>
         <Button label="Send" onPress={handleSend} disabled={!message} size="lg" />
@@ -75,6 +79,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     gap: 16,
+  },
+  textarea: {
+    textTransform: "uppercase",
   },
 });
 

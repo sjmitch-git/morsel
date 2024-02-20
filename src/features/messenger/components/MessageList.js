@@ -13,6 +13,7 @@ const MessageList = ({ messages, onDeleteMessage }) => {
         <Message
           text={item.text}
           type={item.type}
+          timestamp={item.timestamp}
           onDelete={() => onDeleteMessage(item.timestamp)}
         />
       )}
@@ -29,6 +30,7 @@ const styles = StyleSheet.create({
     borderStyle: "dashed",
     maxHeight: 300,
     minWidth: "100%",
+    marginBottom: 36,
   },
 });
 

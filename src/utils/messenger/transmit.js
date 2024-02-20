@@ -18,8 +18,8 @@ async function loadSounds() {
   }
 }
 
-const dotDuration = 300;
-const dashDuration = dotDuration * 3;
+const dotDuration = 261.224;
+const dashDuration = 470.204;
 const gapDuration = dotDuration;
 const letterGapDuration = dashDuration;
 const wordGapDuration = dotDuration * 7;
@@ -33,15 +33,18 @@ async function playSymbol(symbol) {
 
   for (let i = 0; i < symbolArray.length; i++) {
     let soundObject;
+    let durationMillis;
 
     if (stopPlayback) break;
 
     switch (symbolArray[i]) {
       case ".":
         soundObject = dotSoundObject;
+        durationMillis = dotDuration;
         break;
       case "-":
         soundObject = dashSoundObject;
+        durationMillis = dashDuration;
         break;
       default:
         break;
@@ -53,9 +56,11 @@ async function playSymbol(symbol) {
 
     await playPromise;
 
-    await new Promise((resolve) => setTimeout(resolve, soundObject._durationMillis));
-
-    await sleep(gapDuration);
+    // If it's not the last symbol, add gap duration
+    if (i < symbolArray.length - 1) {
+      await new Promise((resolve) => setTimeout(resolve, durationMillis));
+      await sleep(gapDuration);
+    }
   }
 }
 
@@ -79,7 +84,7 @@ async function playMessage(encodedMorseCode) {
   }
 }
 
-export async function transmit(text, loop = 1, delay = 10000) {
+export async function transmit(text, loop = 1, delay = 10000, stopCallback) {
   const morseCode = morseCodeEncode(text);
 
   if (!soundsLoaded) {
@@ -97,16 +102,20 @@ export async function transmit(text, loop = 1, delay = 10000) {
       loop--;
 
       setTimeout(() => {
-        transmit(text, loop, delay);
+        transmit(text, loop, delay, stopCallback);
       }, delay);
     } else if (loop === "infinity") {
       await playMessage(morseCode);
-      transmit(text, loop, delay);
+      transmit(text, loop, delay, stopCallback);
     }
   };
 
   await playMessage(morseCode);
   callback();
+
+  if (stopCallback) {
+    stopCallback(); // Invoke the stopCallback when transmission is stopped
+  }
 }
 
 export function stopTransmit() {
