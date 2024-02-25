@@ -56,7 +56,6 @@ async function playSymbol(symbol) {
 
     await playPromise;
 
-    // If it's not the last symbol, add gap duration
     if (i < symbolArray.length - 1) {
       await new Promise((resolve) => setTimeout(resolve, durationMillis));
       await sleep(gapDuration);
@@ -114,7 +113,7 @@ export async function transmit(text, loop = 1, delay = 10000, stopCallback) {
   callback();
 
   if (stopCallback) {
-    stopCallback(); // Invoke the stopCallback when transmission is stopped
+    stopCallback();
   }
 }
 

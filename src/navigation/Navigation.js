@@ -5,6 +5,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeScreen from "@/screens/HomeScreen";
 import ChatScreen from "@/screens/ChatScreen";
 import ComposeScreen from "@/screens/ComposeScreen";
+import TorchScreen from "@/screens/TorchScreen";
 import Layout from "@/structure/Layout";
 
 const Tab = createBottomTabNavigator();
@@ -23,6 +24,8 @@ const Navigation = () => {
               iconName = "create";
             } else if (route.name === "Chat") {
               iconName = "text";
+            } else if (route.name === "Torch") {
+              iconName = "flashlight-outline";
             }
             return <Ionicons name={iconName} size={size} color={color} />;
           },
@@ -50,6 +53,13 @@ const Navigation = () => {
           {() => (
             <Layout>
               <ChatScreen />
+            </Layout>
+          )}
+        </Tab.Screen>
+        <Tab.Screen name="Torch">
+          {() => (
+            <Layout>
+              <TorchScreen />
             </Layout>
           )}
         </Tab.Screen>

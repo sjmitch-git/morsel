@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, TextInput } from "react-native";
 import { TextArea, H2, Button, Hr } from "@/ui";
 import LocationButton from "./LocationButton";
 import SendPreset from "./SendPreset";
@@ -51,6 +51,21 @@ const Compose = () => {
         onChangeText={(text) => setMessage(text)}
         style={styles.textarea}
       />
+      <TextInput
+        style={styles.input}
+        keyboardType="numeric"
+        placeholder="Loop"
+        value={String(loop)}
+        onChangeText={(text) => setLoop(parseInt(text, 10) || 0)}
+      />
+
+      <TextInput
+        style={styles.input}
+        keyboardType="numeric"
+        placeholder="Delay (ms)"
+        value={String(delay)}
+        onChangeText={(text) => setDelay(parseInt(text, 10) || 0)}
+      />
       <View style={styles.buttonContainer}>
         <Button label="Send" onPress={handleSend} disabled={!message} size="lg" />
         <Button label="Stop" onPress={handleStop} disabled={!playing} size="lg" />
@@ -82,6 +97,13 @@ const styles = StyleSheet.create({
   },
   textarea: {
     textTransform: "uppercase",
+  },
+  input: {
+    height: 40,
+    borderColor: "gray",
+    borderWidth: 1,
+    marginBottom: 10,
+    paddingHorizontal: 10,
   },
 });
 

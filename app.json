@@ -41,6 +41,19 @@
           "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location.",
           "locationWhenInUsePermission": "Show current location on map."
         }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera.",
+          "version": "latest"
+        }
+      ],
+      [
+        "expo-av",
+        {
+          "permissions": ["audioRecording"]
+        }
       ]
     ],
     "owner": "sjmitch"
