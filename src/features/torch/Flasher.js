@@ -1,12 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import { View, Text, Pressable } from "react-native";
+import { View, Text } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { Camera } from "expo-camera";
-import { MaterialIcons } from "@expo/vector-icons";
 
-const Torch = () => {
+const Flasher = ({ torchOn }) => {
   const [hasPermission, setHasPermission] = useState(null);
-  const [torchOn, setTorchOn] = useState(false);
   const [flashMode, setFlashMode] = useState(0);
   const cameraRef = useRef(null);
 
@@ -31,20 +29,15 @@ const Torch = () => {
         const { status } = await Camera.requestCameraPermissionsAsync();
         setHasPermission(status === "granted");
       };
-      setTorchOn(false);
+
       requestCameraPermission();
 
       return () => {
         Camera.defaultProps.flashMode = Camera.Constants.FlashMode.off;
         setHasPermission(null);
-        setTorchOn(false);
       };
     }, [])
   );
-
-  const handleToggleTorch = () => {
-    setTorchOn((prevTorchState) => !prevTorchState);
-  };
 
   if (hasPermission === null) {
     return <View />;
@@ -55,20 +48,11 @@ const Torch = () => {
   }
 
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Pressable onPress={handleToggleTorch}>
-        <MaterialIcons
-          name={torchOn ? "flashlight-on" : "flashlight-off"}
-          size={120}
-          color="black"
-        />
-      </Pressable>
-      <Camera
-        style={{ position: "absolute", top: 0, left: 0, width: 1, height: 1 }}
-        ref={cameraRef}
-      />
-    </View>
+    <Camera
+      style={{ position: "absolute", top: 0, left: 0, width: 1, height: 1 }}
+      ref={cameraRef}
+    />
   );
 };
 
-export default Torch;
+export default Flasher;

@@ -20,6 +20,7 @@ module.exports = function (api) {
             "@/styles": "./src/styles",
             "@/features": "./src/features",
             "@/navigation": "./src/navigation",
+            "@/contexts": "./src/contexts",
           },
         },
       ],

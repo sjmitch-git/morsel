@@ -4,6 +4,19 @@ import { morseCodeEncode } from "@/utils/morseCodeUtils";
 const dotSoundObject = new Audio.Sound();
 const dashSoundObject = new Audio.Sound();
 
+const dotDuration = 261;
+const dashDuration = 470;
+const gapDuration = dotDuration;
+const letterGapDuration = dashDuration;
+const wordGapDuration = gapDuration * 7;
+const durationModifier = 1.5;
+
+const flashDotDuration = dotDuration * durationModifier;
+const flashDashDuration = dashDuration * durationModifier;
+const flashGapDuration = gapDuration * durationModifier;
+const flashLetterGapDuration = letterGapDuration * durationModifier;
+const flashWordGapDuration = flashGapDuration * 7;
+
 let stopPlayback = false;
 let soundsLoaded = false;
 
@@ -18,17 +31,11 @@ async function loadSounds() {
   }
 }
 
-const dotDuration = 261.224;
-const dashDuration = 470.204;
-const gapDuration = dotDuration;
-const letterGapDuration = dashDuration;
-const wordGapDuration = dotDuration * 7;
-
 function sleep(duration) {
   return new Promise((resolve) => setTimeout(resolve, duration));
 }
 
-async function playSymbol(symbol) {
+async function playSymbol(symbol, setFlashState, audioSelected) {
   const symbolArray = symbol.split("");
 
   for (let i = 0; i < symbolArray.length; i++) {
@@ -39,78 +46,122 @@ async function playSymbol(symbol) {
 
     switch (symbolArray[i]) {
       case ".":
-        soundObject = dotSoundObject;
-        durationMillis = dotDuration;
+        if (audioSelected) {
+          soundObject = dotSoundObject;
+          durationMillis = dotDuration;
+        } else {
+          durationMillis = flashDotDuration;
+        }
         break;
       case "-":
-        soundObject = dashSoundObject;
-        durationMillis = dashDuration;
+        if (audioSelected) {
+          soundObject = dashSoundObject;
+          durationMillis = flashDashDuration;
+        } else {
+          durationMillis = flashDashDuration;
+        }
         break;
       default:
         break;
     }
 
-    await soundObject.setPositionAsync(0);
-
-    const playPromise = soundObject.playAsync();
-
-    await playPromise;
+    if (audioSelected) {
+      await soundObject.setPositionAsync(0);
+      const playPromise = soundObject.playAsync();
+      await Promise.all([playPromise, sleep(durationMillis)]);
+    } else {
+      await new Promise((resolve) => {
+        setFlashState(true);
+        setTimeout(() => {
+          setFlashState(false);
+          resolve();
+        }, durationMillis);
+      });
+    }
 
     if (i < symbolArray.length - 1) {
-      await new Promise((resolve) => setTimeout(resolve, durationMillis));
-      await sleep(gapDuration);
+      if (audioSelected) {
+        await sleep(gapDuration);
+      } else await sleep(flashGapDuration);
     }
   }
 }
 
-async function playWord(word) {
+async function playWord(word, setFlashState, audioSelected) {
   const symbols = word.split(" ");
 
   for (let j = 0; j < symbols.length; j++) {
     if (stopPlayback) break;
-    await playSymbol(symbols[j]);
-    await sleep(letterGapDuration);
+    await playSymbol(symbols[j], setFlashState, audioSelected);
+    if (j < symbols.length - 1) {
+      if (audioSelected) {
+        await sleep(letterGapDuration);
+      } else await sleep(flashLetterGapDuration);
+    }
   }
 }
 
-async function playMessage(encodedMorseCode) {
+async function playMessage(encodedMorseCode, setFlashState, audioSelected) {
   const words = encodedMorseCode.split("   ");
-
   for (let i = 0; i < words.length; i++) {
     if (stopPlayback) break;
-    await playWord(words[i]);
-    await sleep(wordGapDuration);
+    await playWord(words[i], setFlashState, audioSelected);
+    if (i < words.length - 1) {
+      if (audioSelected) {
+        await sleep(wordGapDuration);
+      } else await sleep(flashWordGapDuration);
+    }
   }
 }
 
-export async function transmit(text, loop = 1, delay = 10000, stopCallback) {
+export async function transmit(
+  text,
+  loop = 1,
+  delay = 10000,
+  stopCallback,
+  setFlashState,
+  audioSelected
+) {
   const morseCode = morseCodeEncode(text);
 
-  if (!soundsLoaded) {
-    await loadSounds();
+  if (!soundsLoaded && audioSelected) {
+    try {
+      await loadSounds();
+    } catch (error) {
+      console.error("Error loading sounds:", error);
+      return;
+    }
   }
 
   stopPlayback = false;
 
   const callback = async () => {
-    console.log("Morse code playback completed x", loop);
-
     if (stopPlayback) return;
 
     if (isFinite(loop) && loop > 1) {
       loop--;
 
       setTimeout(() => {
-        transmit(text, loop, delay, stopCallback);
+        transmit(text, loop, delay, stopCallback, setFlashState, audioSelected);
       }, delay);
-    } else if (loop === "infinity") {
-      await playMessage(morseCode);
-      transmit(text, loop, delay, stopCallback);
+    } else if (loop === -1) {
+      try {
+        await playMessage(morseCode, setFlashState, audioSelected);
+        if (!stopPlayback) {
+          transmit(text, loop, delay, stopCallback, setFlashState, audioSelected);
+        }
+      } catch (error) {
+        console.error("Error during playMessage:", error);
+      }
     }
   };
 
-  await playMessage(morseCode);
-  callback();
+  try {
+    await playMessage(morseCode, setFlashState, audioSelected);
+    callback();
+  } catch (error) {
+    console.error("Error during initial playMessage:", error);
+  }
 
   if (stopCallback) {
     stopCallback();

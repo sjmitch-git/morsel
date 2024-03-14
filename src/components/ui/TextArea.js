@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TextInput } from "react-native";
+import { TextInput, Keyboard } from "react-native";
 import { globalStyles } from "@/themes";
 import { FormsStyles } from "@/styles";
 
@@ -12,6 +12,8 @@ const TextArea = ({ style, multiline = true, rows, placeholder, inputMode = "tex
 
   const handleBlur = () => {
     setIsFocused(false);
+    console.log("handleBlur called");
+    Keyboard.dismiss();
   };
 
   return (
