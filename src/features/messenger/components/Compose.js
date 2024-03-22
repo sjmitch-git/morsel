@@ -1,8 +1,9 @@
-import React, { useState } from "react";
-import { View, StyleSheet, Text, Pressable } from "react-native";
-import { Picker } from "@react-native-picker/picker";
+import React, { useState, useRef } from "react";
+import { View, StyleSheet, Pressable } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
-import { TextArea, H2, Button, Hr } from "@/ui";
+import { useDarkMode } from "@/contexts/DarkModeContext";
+import { TextArea, H2, Hr, Select } from "@/ui";
+import { Constants } from "@/styles";
 import LocationButton from "./LocationButton";
 import SendPreset from "./SendPreset";
 import {
@@ -13,9 +14,9 @@ import {
   stopTransmit,
 } from "@/services/messenger.service";
 import Flasher from "@/features/torch/Flasher";
+import { loopOptions, delayOptions } from "@/constants/transmitOptions";
 
-const audioIcon = <FontAwesome5 name="volume-up" size={24} color="black" />;
-const flashIcon = <FontAwesome5 name="bolt" size={24} color="black" />;
+const iconSize = 30;
 
 const Compose = () => {
   const [message, setMessage] = useState("");
@@ -25,6 +26,8 @@ const Compose = () => {
   const [flashState, setFlashState] = useState(false);
   const [audioSelected, setAudioSelected] = useState(true);
   const [flashSelected, setFlashSelected] = useState(false);
+  const { isDarkMode } = useDarkMode();
+  const textareaRef = useRef();
 
   const setNewMessage = (newMessage) => {
     setMessage((prevMessage) => (prevMessage ? prevMessage + " " + newMessage : newMessage));
@@ -33,7 +36,7 @@ const Compose = () => {
   const handleSend = async () => {
     setPlaying(true);
     transmit(message, loop, delay, handleStop, setFlashState, audioSelected);
-    saveSendMessage();
+    // saveSendMessage();
   };
 
   const handleStop = () => {
@@ -41,37 +44,16 @@ const Compose = () => {
     setPlaying(false);
   };
 
-  const saveSendMessage = async () => {
+  /* const saveSendMessage = async () => {
     const existingMessages = await getMessages();
     const updatedMessages = [formatMessage(message), ...existingMessages];
     saveMessages(updatedMessages);
-  };
+  }; */
 
   const handleReset = () => {
     setMessage("");
+    textareaRef.current.focus();
   };
-
-  const loopOptions = [
-    { label: "1", value: 1 },
-    { label: "3", value: 3 },
-    { label: "6", value: 6 },
-    { label: "12", value: 12 },
-    { label: "Infinity", value: -1 },
-  ];
-
-  const delayOptions = [
-    { label: "10 secs", value: 10000 },
-    { label: "30 secs", value: 30000 },
-    { label: "1 min", value: 60000 },
-    { label: "2 mins", value: 120000 },
-    { label: "3 mins", value: 180000 },
-    { label: "5 mins", value: 300000 },
-  ];
-
-  const transmitOptions = [
-    { label: "Audio", value: 0 },
-    { label: "Flash", value: 1 },
-  ];
 
   const handleLoopChange = (value) => {
     setLoop(value);
@@ -81,94 +63,126 @@ const Compose = () => {
     setDelay(itemValue);
   };
 
-  const handleTransmitOptionChange = (itemValue) => {
-    switch (itemValue) {
-      case 0:
-        setAudioSelected(true);
-        setFlashSelected(false);
-        break;
-      case 1:
-        setAudioSelected(false);
-        setFlashSelected(true);
-        break;
-      default:
-        break;
-    }
-  };
-
   return (
     <View style={styles.container}>
-      <TextArea
-        multiline={true}
-        placeholder="Type your message"
-        value={message}
-        onChangeText={(text) => setMessage(text)}
-        style={styles.textarea}
-      />
-
-      <View style={styles.buttonContainer}>
-        <Button label="Send" onPress={handleSend} disabled={!message || playing} size="lg" />
-        <Button label="Stop" onPress={handleStop} disabled={!playing} size="lg" />
-        <Button label="Reset" onPress={handleReset} disabled={!message} size="lg" />
-      </View>
-
-      <Hr color="#ddd" height={10} />
-
-      <View style={styles.options}>
-        <View style={styles.pickerContainer}>
-          <Text>Send Options test: {audioSelected}</Text>
-          <View style={styles.options}>
-            <Pressable
-              style={({ pressed }) => [
-                styles.button,
-                audioSelected ? styles.selectedButton : null, // Apply selectedButton style if audioSelected is true
-                pressed && styles.pressedButton,
-              ]}
-              onPress={() => {
-                setAudioSelected(true);
-                setFlashSelected(false); // Deselect flash option
-              }}
-            >
-              <FontAwesome5 name="volume-up" size={40} color={audioSelected ? "white" : "black"} />
-            </Pressable>
-            <Pressable
-              style={({ pressed }) => [
-                styles.button,
-                flashSelected ? styles.selectedButton : null, // Apply selectedButton style if flashSelected is true
-                pressed && styles.pressedButton,
-              ]}
-              onPress={() => {
-                setFlashSelected(true);
-                setAudioSelected(false); // Deselect audio option
-              }}
-            >
-              <FontAwesome5 name="bolt" size={40} color={flashSelected ? "white" : "black"} />
-            </Pressable>
-          </View>
-        </View>
+      <View style={{ position: "relative" }}>
+        <TextArea
+          multiline={true}
+          rows={2}
+          placeholder="Type your message here!"
+          value={message}
+          onChangeText={(text) => setMessage(text)}
+          style={styles.textarea}
+          ref={textareaRef}
+        />
+        {message.length > 0 && (
+          <Pressable style={{ position: "absolute", top: 10, right: 14 }} onPress={handleReset}>
+            <FontAwesome5
+              name="times"
+              size={24}
+              color={isDarkMode ? Constants.lightColor : Constants.darkColor}
+            />
+          </Pressable>
+        )}
       </View>
 
       <View style={styles.options}>
-        <View style={styles.pickerContainer}>
-          <Text>Select Loop:</Text>
-          <Picker selectedValue={loop} onValueChange={handleLoopChange} style={styles.picker}>
-            {loopOptions.map((option) => (
-              <Picker.Item key={option.value} label={option.label} value={option.value} />
-            ))}
-          </Picker>
+        <View style={styles.transmit_options}>
+          {!playing && (
+            <Pressable
+              style={({ pressed }) => [
+                styles.button,
+                pressed && styles.pressedButton,
+                {
+                  borderRadius: Constants.borderRadius,
+                  backgroundColor:
+                    !message || playing ? Constants.disabledColor : Constants.primaryColor,
+                },
+              ]}
+              onPress={handleSend}
+            >
+              <FontAwesome5
+                name="play"
+                size={iconSize}
+                color={!message || playing ? Constants.shimColor : Constants.lightColor}
+              />
+            </Pressable>
+          )}
+          {playing && (
+            <Pressable
+              style={({ pressed }) => [
+                styles.button,
+                pressed && styles.pressedButton,
+                {
+                  borderRadius: Constants.borderRadius,
+                  backgroundColor: playing ? Constants.primaryColor : Constants.disabledColor,
+                },
+              ]}
+              onPress={handleStop}
+            >
+              <FontAwesome5
+                name="stop"
+                size={iconSize}
+                color={playing ? Constants.lightColor : Constants.shimColor}
+              />
+            </Pressable>
+          )}
         </View>
-
-        <View style={styles.pickerContainer}>
-          <Text>Select Delay:</Text>
-          <Picker selectedValue={delay} onValueChange={handleDelayChange} style={styles.picker}>
-            {delayOptions.map((option) => (
-              <Picker.Item key={option.value} label={option.label} value={option.value} />
-            ))}
-          </Picker>
+        <View style={styles.transmit_options}>
+          <Pressable
+            style={({ pressed }) => [
+              styles.button,
+              audioSelected ? styles.selectedButton : null,
+              { borderTopLeftRadius: 8, borderBottomLeftRadius: 8 },
+              pressed && styles.pressedButton,
+            ]}
+            onPress={() => {
+              setAudioSelected(true);
+              setFlashSelected(false);
+            }}
+          >
+            <FontAwesome5
+              name="volume-up"
+              size={iconSize}
+              color={audioSelected ? "white" : "black"}
+            />
+          </Pressable>
+          <Pressable
+            style={({ pressed }) => [
+              styles.button,
+              flashSelected ? styles.selectedButton : null,
+              { borderTopRightRadius: 8, borderBottomRightRadius: 8 },
+              pressed && styles.pressedButton,
+            ]}
+            onPress={() => {
+              setFlashSelected(true);
+              setAudioSelected(false);
+            }}
+          >
+            <FontAwesome5 name="bolt" size={iconSize} color={flashSelected ? "white" : "black"} />
+          </Pressable>
         </View>
       </View>
+
+      <View style={styles.options}>
+        <Select
+          label="Loop:"
+          selectedValue={loop}
+          onValueChange={handleLoopChange}
+          data={loopOptions}
+        />
+        <Select
+          label="Delay:"
+          selectedValue={delay}
+          onValueChange={handleDelayChange}
+          data={delayOptions}
+        />
+      </View>
+
+      <Hr color="#ddd" height={2} />
 
       <H2>Preset mesages</H2>
+
       <View style={styles.buttonContainer}>
         <SendPreset label="SOS" setNewMessage={setNewMessage} state="danger" />
         <SendPreset label="Medical Emergency" setNewMessage={setNewMessage} />
@@ -208,22 +222,29 @@ const styles = StyleSheet.create({
   },
   textarea: {
     textTransform: "uppercase",
+    borderStyle: "dashed",
+    borderWidth: 4,
   },
-  input: {
+  /* input: {
     height: 40,
     borderColor: "gray",
     borderWidth: 1,
     marginBottom: 10,
     paddingHorizontal: 10,
+  }, */
+  transmit_options: {
+    flexDirection: "row",
+    justifyContent: "flex-start",
   },
   button: {
-    padding: 10,
-    marginHorizontal: 5,
-    backgroundColor: "gray",
-    borderRadius: 5,
+    width: 65,
+    height: 65,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "lightgrey",
   },
   selectedButton: {
-    backgroundColor: "red",
+    backgroundColor: "blue",
   },
   pressedButton: {
     opacity: 0.5,

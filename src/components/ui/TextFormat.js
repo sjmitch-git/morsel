@@ -1,14 +1,14 @@
 import React from "react";
 import { Text, StyleSheet, View } from "react-native";
-import { globalStyles } from "@/themes";
 import { Constants } from "@/styles";
+import { AppText } from "@/shared/Typography";
 
 const P = ({
   style,
   children,
   fontSize = Constants.baseFontSize,
   textAlign = Constants.baseTextAlign,
-  marginBottom = 10,
+  marginBottom = Constants.spacingUnit,
   lineHeight = Constants.baseLineHeight,
   fontFamily = Constants.fontSansSerif,
 }) => {
@@ -21,7 +21,28 @@ const P = ({
       fontFamily: fontFamily,
     },
   });
-  return <Text style={[styles.paragraph, style]}>{children}</Text>;
+  return <AppText style={[styles.paragraph, style]}>{children}</AppText>;
+};
+
+const Label = ({
+  style,
+  children,
+  fontSize = Constants.baseFontSize,
+  textAlign = Constants.baseTextAlign,
+  marginBottom = Constants.spacingUnit,
+  lineHeight = Constants.baseLineHeight,
+  fontFamily = Constants.fontSansSerif,
+}) => {
+  const styles = StyleSheet.create({
+    label: {
+      fontSize: fontSize,
+      textAlign: textAlign,
+      marginBottom: marginBottom,
+      lineHeight: lineHeight,
+      fontFamily: fontFamily,
+    },
+  });
+  return <AppText style={[styles.label, style]}>{children}</AppText>;
 };
 
 const Span = ({ style, children }) => {
@@ -161,4 +182,4 @@ const Hr = ({ color = "#000000", height = 1, marginVertical = 10, style = "solid
   return <View style={styles.horizontalRule} role="separator" />;
 };
 
-export { P, Span, Em, Strong, Small, Mark, Del, Ins, Sub, Sup, Code, Pre, U, Br, Hr };
+export { P, Label, Span, Em, Strong, Small, Mark, Del, Ins, Sub, Sup, Code, Pre, U, Br, Hr };

@@ -9,7 +9,10 @@ const FormsStyles = StyleSheet.create({
     borderColor: Constants.borderColor,
     borderWidth: Constants.borderWidth,
     borderRadius: Constants.borderRadius,
-    padding: 8,
+    padding: Constants.spacingUnit,
+  },
+  inputFocus: {
+    borderColor: Constants.inputFocusColor,
   },
 });
 

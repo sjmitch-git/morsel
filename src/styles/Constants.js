@@ -1,5 +1,11 @@
+import { lighten, darken } from "polished";
+
+import ExpoConstants from "expo-constants";
+
 import Colors from "./Colors";
 import Fonts from "./Fonts";
+
+const theme = ExpoConstants.expoConfig.theme;
 
 const Constants = {
   // Typography
@@ -8,12 +14,12 @@ const Constants = {
   baseTextAlign: "auto",
 
   // Colors
-  darkColor: Colors.darkestGrey,
+  darkColor: Colors.black,
   lightColor: Colors.lightestGrey,
 
-  primaryColor: Colors.purple,
-  primaryColorLight: Colors.lightPurple,
-  primaryColorDark: Colors.deepPurple,
+  primaryColor: Colors[theme.primary],
+  primaryColorLight: lighten(0.2, Colors[theme.primary]),
+  primaryColorDark: darken(0.2, Colors[theme.primary]),
 
   secondaryColor: Colors.green,
   infoColorLight: Colors.lightGreen,
@@ -41,8 +47,12 @@ const Constants = {
 
   disabledColor: Colors.midGrey,
   disabledLightColor: Colors.lighterGrey,
+  disabledDarkColor: Colors.darkerGrey,
   accentColor: Colors.yellow,
   focusColor: Colors.cyan,
+
+  activeColor: theme.active,
+  inactiveColor: theme.inactive,
 
   // Spacing
   spacingUnit: 8,
@@ -75,12 +85,21 @@ const Constants = {
   inputHeight: 40,
   inputFontSize: 16,
   inputPaddingHorizontal: 10,
+  inputFocusColor: theme.active,
 
   // Headings
   h1FontSize: 36,
   h2FontSize: 30,
   h3FontSize: 24,
   h4FontSize: 18,
+  headingOpacity: 0.2,
+  headingFontWeight: 700,
+  headingTextTransform: "capitalize",
+
+  // icons
+  iconSize: 30,
+  iconSizeSmall: 24,
+  iconSizeLarge: 36,
 };
 
 export default Constants;

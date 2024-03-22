@@ -1,34 +1,44 @@
-import React, { useState } from "react";
+import React, { useState, forwardRef } from "react";
+import { useDarkMode } from "@/contexts/DarkModeContext";
 import { TextInput, Keyboard } from "react-native";
-import { globalStyles } from "@/themes";
-import { FormsStyles } from "@/styles";
+import { FormsStyles, lightTheme, darkTheme, Colors } from "@/styles";
 
-const TextArea = ({ style, multiline = true, rows, placeholder, inputMode = "text", ...rest }) => {
-  const [isFocused, setIsFocused] = useState(false);
+const TextArea = forwardRef(
+  ({ style, multiline = true, rows, placeholder, inputMode = "text", ...rest }, ref) => {
+    const [isFocused, setIsFocused] = useState(false);
+    const { isDarkMode } = useDarkMode();
+    const textColor = isDarkMode ? darkTheme.textColor : lightTheme.textColor;
 
-  const handleFocus = () => {
-    setIsFocused(true);
-  };
+    const handleFocus = () => {
+      setIsFocused(true);
+    };
 
-  const handleBlur = () => {
-    setIsFocused(false);
-    console.log("handleBlur called");
-    Keyboard.dismiss();
-  };
+    const handleBlur = () => {
+      setIsFocused(false);
+      Keyboard.dismiss();
+    };
 
-  return (
-    <TextInput
-      style={[style, FormsStyles.input, isFocused && globalStyles.inputFocused]}
-      multiline={multiline}
-      rows={rows}
-      placeholder={placeholder}
-      onFocus={handleFocus}
-      onBlur={handleBlur}
-      autoCapitalize="characters"
-      inputMode={inputMode}
-      {...rest}
-    />
-  );
-};
+    return (
+      <TextInput
+        style={[
+          FormsStyles.input,
+          style,
+          isFocused && FormsStyles.inputFocus,
+          { color: textColor },
+        ]}
+        multiline={multiline}
+        rows={rows}
+        placeholder={placeholder}
+        placeholderTextColor={Colors.midGrey}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
+        autoCapitalize="characters"
+        inputMode={inputMode}
+        {...rest}
+        ref={ref}
+      />
+    );
+  }
+);
 
 export { TextArea };

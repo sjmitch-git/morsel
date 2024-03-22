@@ -11,7 +11,8 @@ const styles = StyleSheet.create({
     padding: 15,
     width: "100%",
     maxWidth: 480,
-    margin: "auto",
+    marginHorizontal: "auto",
+    marginTop: 32,
   },
 });
 

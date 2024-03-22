@@ -1,14 +1,25 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
-import Compose from "@/features/messenger/components/Compose";
+import { View, StyleSheet, Keyboard, Pressable, Platform } from "react-native";
 import { H1 } from "@/ui";
+import Compose from "@/features/messenger/components/Compose";
+
+const handleBlur = () => {
+  if (Platform.OS === "web") return;
+  Keyboard.dismiss();
+};
+
+const DismissKeyboard = ({ children }) => (
+  <Pressable onPress={() => handleBlur()}>{children}</Pressable>
+);
 
 const ComposeScreen = () => {
   return (
-    <View style={styles.container}>
-      <H1>Compose Screen!</H1>
-      <Compose />
-    </View>
+    <DismissKeyboard>
+      <View style={styles.container}>
+        <H1>Send Message</H1>
+        <Compose />
+      </View>
+    </DismissKeyboard>
   );
 };
 
@@ -17,9 +28,6 @@ const styles = StyleSheet.create({
     justifyContent: "start",
     alignItems: "center",
     width: "100%",
-    borderWidth: 1,
-    borderColor: "orange",
-    borderStyle: "dashed",
   },
 });
 
