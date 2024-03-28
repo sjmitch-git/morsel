@@ -1,15 +1,18 @@
 import { Audio } from "expo-av";
 import { morseCodeEncode } from "@/utils/morseCodeUtils";
 
+const IntervalMillis = 1000;
+
 const dotSoundObject = new Audio.Sound();
+
 const dashSoundObject = new Audio.Sound();
 
 const dotDuration = 261;
 const dashDuration = 470;
-const gapDuration = dotDuration;
-const letterGapDuration = dashDuration;
+const gapDuration = dotDuration * 1.25;
+const letterGapDuration = dashDuration * 1.25;
 const wordGapDuration = gapDuration * 7;
-const durationModifier = 1.5;
+const durationModifier = 2;
 
 const flashDotDuration = dotDuration * durationModifier;
 const flashDashDuration = dashDuration * durationModifier;
@@ -66,9 +69,29 @@ async function playSymbol(symbol, setFlashState, audioSelected) {
     }
 
     if (audioSelected) {
-      await soundObject.setPositionAsync(0);
+      /*  await soundObject.setPositionAsync(0);
       const playPromise = soundObject.playAsync();
-      await Promise.all([playPromise, sleep(durationMillis)]);
+      await Promise.all([playPromise, sleep(durationMillis)]); */
+
+      /*  const status = await soundObject.getStatusAsync();
+      console.log("status", status);
+      if (status.isPlaying) {
+        await soundObject.stopAsync();
+      } */
+
+      /* await soundObject.setPositionAsync(0);
+      const playPromise = soundObject.playAsync();
+
+      await playPromise; */
+
+      await soundObject.setPositionAsync(0);
+
+      await new Promise((resolve) => {
+        soundObject.playAsync();
+        setTimeout(() => {
+          resolve();
+        }, durationMillis);
+      });
     } else {
       await new Promise((resolve) => {
         setFlashState(true);
@@ -103,6 +126,11 @@ async function playWord(word, setFlashState, audioSelected) {
 
 async function playMessage(encodedMorseCode, setFlashState, audioSelected) {
   const words = encodedMorseCode.split("   ");
+  await new Promise((resolve) => {
+    setTimeout(() => {
+      resolve();
+    }, 2000);
+  });
   for (let i = 0; i < words.length; i++) {
     if (stopPlayback) break;
     await playWord(words[i], setFlashState, audioSelected);
@@ -153,6 +181,8 @@ export async function transmit(
       } catch (error) {
         console.error("Error during playMessage:", error);
       }
+    } else if (loop === 1) {
+      stopCallback();
     }
   };
 
@@ -161,10 +191,6 @@ export async function transmit(
     callback();
   } catch (error) {
     console.error("Error during initial playMessage:", error);
-  }
-
-  if (stopCallback) {
-    stopCallback();
   }
 }
 

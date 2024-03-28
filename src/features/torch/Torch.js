@@ -1,14 +1,19 @@
 import React, { useState, useEffect, useRef } from "react";
 import { View, Text, Pressable } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
+import { useDarkMode } from "@/contexts/DarkModeContext";
 import { Camera } from "expo-camera";
 import { MaterialIcons } from "@expo/vector-icons";
+import { lightTheme, darkTheme } from "@/styles";
 
 const Torch = () => {
   const [hasPermission, setHasPermission] = useState(null);
   const [torchOn, setTorchOn] = useState(false);
   const [flashMode, setFlashMode] = useState(0);
   const cameraRef = useRef(null);
+
+  const { isDarkMode } = useDarkMode();
+  const iconColor = isDarkMode ? darkTheme.textColor : lightTheme.textColor;
 
   useEffect(() => {
     if (cameraRef) {
@@ -60,7 +65,7 @@ const Torch = () => {
         <MaterialIcons
           name={torchOn ? "flashlight-on" : "flashlight-off"}
           size={120}
-          color="black"
+          color={iconColor}
         />
       </Pressable>
       <Camera

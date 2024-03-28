@@ -4,12 +4,12 @@
     "slug": "morsel",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/logo.png",
+    "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#0f172a"
+      "backgroundColor": "#111111"
     },
     "assetBundlePatterns": ["**/*"],
     "experiments": {
@@ -22,7 +22,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#0f172a"
+        "backgroundColor": "#111111"
       },
       "package": "com.morsell.morsel"
     },
@@ -59,9 +59,10 @@
     "owner": "sjmitch",
     "theme": {
       "dark": true,
-      "primary": "green",
-      "active": "orange",
-      "inactive": "pink"
+      "primary": "indigo",
+      "secondary": "blue",
+      "active": "white",
+      "inactive": "midGrey"
     }
   }
 }

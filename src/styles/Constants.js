@@ -16,14 +16,15 @@ const Constants = {
   // Colors
   darkColor: Colors.black,
   lightColor: Colors.lightestGrey,
+  midColor: Colors.midGrey,
 
   primaryColor: Colors[theme.primary],
   primaryColorLight: lighten(0.2, Colors[theme.primary]),
   primaryColorDark: darken(0.2, Colors[theme.primary]),
 
-  secondaryColor: Colors.green,
-  infoColorLight: Colors.lightGreen,
-  infoColorDark: Colors.deepGreen,
+  secondaryColor: Colors[theme.secondary],
+  infoColorLight: lighten(0.2, Colors[theme.secondary]),
+  infoColorDark: darken(0.2, Colors[theme.secondary]),
 
   infoColor: Colors.blue,
   infoColorLight: Colors.lightBlue,
@@ -48,11 +49,11 @@ const Constants = {
   disabledColor: Colors.midGrey,
   disabledLightColor: Colors.lighterGrey,
   disabledDarkColor: Colors.darkerGrey,
-  accentColor: Colors.yellow,
+  accentColor: theme.accent,
   focusColor: Colors.cyan,
 
-  activeColor: theme.active,
-  inactiveColor: theme.inactive,
+  activeColor: Colors[theme.active],
+  inactiveColor: Colors[theme.inactive],
 
   // Spacing
   spacingUnit: 8,

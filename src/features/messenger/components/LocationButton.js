@@ -6,7 +6,7 @@ import {
 } from "@/services/userLocation.service";
 import { Button } from "@/ui";
 
-const LocationButton = ({ setNewMessage, label = "Get my Location", state, size }) => {
+const LocationButton = ({ setNewMessage, label = "My Location", state, size }) => {
   const handlePress = async () => {
     try {
       const coordinates = await getUserLocation();

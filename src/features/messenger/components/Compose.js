@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { View, StyleSheet, Pressable } from "react-native";
+import { View, StyleSheet, Pressable, Animated, ScrollView, Platform } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { useDarkMode } from "@/contexts/DarkModeContext";
 import { TextArea, H2, Hr, Select } from "@/ui";
@@ -16,8 +16,6 @@ import {
 import Flasher from "@/features/torch/Flasher";
 import { loopOptions, delayOptions } from "@/constants/transmitOptions";
 
-const iconSize = 30;
-
 const Compose = () => {
   const [message, setMessage] = useState("");
   const [playing, setPlaying] = useState(false);
@@ -29,8 +27,16 @@ const Compose = () => {
   const { isDarkMode } = useDarkMode();
   const textareaRef = useRef();
 
+  const translateYValue = Platform.OS === "web" ? 356 : 250;
+  const translateYValueOpen = Platform.OS === "web" ? 240 : 0; // 135
+
+  // bottom drawer
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const drawerTranslateY = useRef(new Animated.Value(translateYValue)).current;
+
   const setNewMessage = (newMessage) => {
     setMessage((prevMessage) => (prevMessage ? prevMessage + " " + newMessage : newMessage));
+    handleDrawerToggle();
   };
 
   const handleSend = async () => {
@@ -63,6 +69,17 @@ const Compose = () => {
     setDelay(itemValue);
   };
 
+  const handleDrawerToggle = () => {
+    const toValue = drawerOpen ? translateYValue : translateYValueOpen;
+
+    Animated.timing(drawerTranslateY, {
+      toValue: toValue,
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
+    setDrawerOpen(!drawerOpen);
+  };
+
   return (
     <View style={styles.container}>
       <View style={{ position: "relative" }}>
@@ -79,7 +96,7 @@ const Compose = () => {
           <Pressable style={{ position: "absolute", top: 10, right: 14 }} onPress={handleReset}>
             <FontAwesome5
               name="times"
-              size={24}
+              size={Constants.iconSizeSmall}
               color={isDarkMode ? Constants.lightColor : Constants.darkColor}
             />
           </Pressable>
@@ -103,7 +120,7 @@ const Compose = () => {
             >
               <FontAwesome5
                 name="play"
-                size={iconSize}
+                size={Constants.iconSize}
                 color={!message || playing ? Constants.shimColor : Constants.lightColor}
               />
             </Pressable>
@@ -122,7 +139,7 @@ const Compose = () => {
             >
               <FontAwesome5
                 name="stop"
-                size={iconSize}
+                size={Constants.iconSize}
                 color={playing ? Constants.lightColor : Constants.shimColor}
               />
             </Pressable>
@@ -133,7 +150,10 @@ const Compose = () => {
             style={({ pressed }) => [
               styles.button,
               audioSelected ? styles.selectedButton : null,
-              { borderTopLeftRadius: 8, borderBottomLeftRadius: 8 },
+              {
+                borderTopLeftRadius: Constants.borderRadius,
+                borderBottomLeftRadius: Constants.borderRadius,
+              },
               pressed && styles.pressedButton,
             ]}
             onPress={() => {
@@ -143,7 +163,7 @@ const Compose = () => {
           >
             <FontAwesome5
               name="volume-up"
-              size={iconSize}
+              size={Constants.iconSize}
               color={audioSelected ? "white" : "black"}
             />
           </Pressable>
@@ -151,7 +171,10 @@ const Compose = () => {
             style={({ pressed }) => [
               styles.button,
               flashSelected ? styles.selectedButton : null,
-              { borderTopRightRadius: 8, borderBottomRightRadius: 8 },
+              {
+                borderTopRightRadius: Constants.borderRadius,
+                borderBottomRightRadius: Constants.borderRadius,
+              },
               pressed && styles.pressedButton,
             ]}
             onPress={() => {
@@ -159,7 +182,11 @@ const Compose = () => {
               setAudioSelected(false);
             }}
           >
-            <FontAwesome5 name="bolt" size={iconSize} color={flashSelected ? "white" : "black"} />
+            <FontAwesome5
+              name="bolt"
+              size={Constants.iconSize}
+              color={flashSelected ? "white" : "black"}
+            />
           </Pressable>
         </View>
       </View>
@@ -179,17 +206,58 @@ const Compose = () => {
         />
       </View>
 
-      <Hr color="#ddd" height={2} />
+      {/* <Hr color="#ddd" height={2} /> */}
 
-      <H2>Preset mesages</H2>
+      <Animated.View
+        style={[styles.drawerContainer, { transform: [{ translateY: drawerTranslateY }] }]}
+      >
+        <Pressable
+          style={({ pressed }) => [
+            pressed && styles.pressedButton,
+            {
+              flex: 1,
+              alignItems: "center",
+              justifyContent: "center",
+              paddingVertical: 8,
+            },
+          ]}
+          onPress={handleDrawerToggle}
+        >
+          <H2 style={{ marginBottom: 0, flex: 1, color: Constants.darkColor }}>Preset mesages</H2>
+        </Pressable>
 
-      <View style={styles.buttonContainer}>
-        <SendPreset label="SOS" setNewMessage={setNewMessage} state="danger" />
-        <SendPreset label="Medical Emergency" setNewMessage={setNewMessage} />
-      </View>
-      <View style={styles.buttonContainer}>
-        <LocationButton setNewMessage={setNewMessage} />
-      </View>
+        <View style={styles.drawerContent}>
+          <View>
+            <ScrollView
+              horizontal={true}
+              style={styles.scrollView}
+              showsHorizontalScrollIndicator={false}
+            >
+              <SendPreset label="SOS" setNewMessage={setNewMessage} state="danger" />
+              <LocationButton setNewMessage={setNewMessage} />
+              <SendPreset label="Medical Emergency" setNewMessage={setNewMessage} />
+              <SendPreset label="Medical Emergency" setNewMessage={setNewMessage} />
+              <SendPreset label="Medical Emergency" setNewMessage={setNewMessage} />
+              <SendPreset label="Medical Emergency" setNewMessage={setNewMessage} />
+              <SendPreset label="Medical Emergency" setNewMessage={setNewMessage} />
+              <SendPreset label="Medical Emergency" setNewMessage={setNewMessage} />
+            </ScrollView>
+          </View>
+          {/* <View>
+            <ScrollView
+              horizontal={true}
+              style={styles.scrollView}
+              showsHorizontalScrollIndicator={false}
+            >
+              <LocationButton setNewMessage={setNewMessage} />
+              <LocationButton setNewMessage={setNewMessage} />
+              <LocationButton setNewMessage={setNewMessage} />
+              <LocationButton setNewMessage={setNewMessage} />
+            </ScrollView>
+          </View> */}
+        </View>
+      </Animated.View>
+
       {flashSelected && <Flasher torchOn={flashState} />}
     </View>
   );
@@ -206,19 +274,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     gap: 16,
   },
-  pickerContainer: {
+  scrollView: {
+    backgroundColor: Constants.shimColor,
     flex: 1,
-  },
-  picker: {
-    height: 50,
-    width: "100%",
-    borderColor: "gray",
-    borderWidth: 1,
-  },
-  buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    gap: 16,
+    padding: 16,
   },
   textarea: {
     textTransform: "uppercase",
@@ -244,10 +303,24 @@ const styles = StyleSheet.create({
     backgroundColor: "lightgrey",
   },
   selectedButton: {
-    backgroundColor: "blue",
+    backgroundColor: Constants.secondaryColor,
   },
   pressedButton: {
     opacity: 0.5,
+  },
+  drawerContainer: {
+    position: "absolute",
+    bottom: 0,
+    left: -16,
+    right: -16,
+    backgroundColor: Constants.midColor,
+    overflow: "hidden",
+    paddingBottom: 20,
+  },
+  drawerContent: {
+    padding: 20,
+    // paddingBottom: 50,
+    gap: 16,
   },
 });
 
