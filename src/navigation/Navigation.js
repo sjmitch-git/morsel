@@ -34,7 +34,7 @@ const Navigation = () => {
           tabBarIcon: ({ color, size }) => {
             let iconName;
 
-            if (route.name === "Home") {
+            if (route.name === "Morsel") {
               iconName = "home";
             } else if (route.name === "Send") {
               iconName = "create";
@@ -60,7 +60,7 @@ const Navigation = () => {
           tabBarLabel: "",
         })}
       >
-        <Tab.Screen name="Home">
+        <Tab.Screen name="Morsel">
           {() => (
             <Layout>
               <HomeScreen />

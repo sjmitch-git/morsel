@@ -1,3 +1,5 @@
+import { Platform } from "react-native";
+
 import { lighten, darken } from "polished";
 
 import ExpoConstants from "expo-constants";
@@ -6,6 +8,7 @@ import Colors from "./Colors";
 import Fonts from "./Fonts";
 
 const theme = ExpoConstants.expoConfig.theme;
+const opacityModifier = Platform.OS === "web" ? 0.2 : 0.2;
 
 const Constants = {
   // Typography
@@ -19,12 +22,12 @@ const Constants = {
   midColor: Colors.midGrey,
 
   primaryColor: Colors[theme.primary],
-  primaryColorLight: lighten(0.2, Colors[theme.primary]),
-  primaryColorDark: darken(0.2, Colors[theme.primary]),
+  primaryColorLight: lighten(opacityModifier, Colors[theme.primary]),
+  primaryColorDark: darken(opacityModifier, Colors[theme.primary]),
 
   secondaryColor: Colors[theme.secondary],
-  infoColorLight: lighten(0.2, Colors[theme.secondary]),
-  infoColorDark: darken(0.2, Colors[theme.secondary]),
+  infoColorLight: lighten(opacityModifier, Colors[theme.secondary]),
+  infoColorDark: darken(opacityModifier, Colors[theme.secondary]),
 
   infoColor: Colors.blue,
   infoColorLight: Colors.lightBlue,
@@ -45,6 +48,7 @@ const Constants = {
   backdropColor: Colors.opaqueDark,
   shimColor: Colors.opaque,
   shimLightColor: Colors.opaqueLight,
+  shimDarkColor: Colors.opaqueDark,
 
   disabledColor: Colors.midGrey,
   disabledLightColor: Colors.lighterGrey,
@@ -67,7 +71,7 @@ const Constants = {
   // Shadows
   shadowColor: Colors.black,
   shadowOffset: { width: 0, height: 2 },
-  shadowOpacity: 0.2,
+  shadowOpacity: opacityModifier,
   shadowRadius: 2,
 
   // Fonts
@@ -81,6 +85,7 @@ const Constants = {
   buttonPaddingVertical: 10,
   buttonFontSize: 18,
   buttonFontWeight: 600,
+  buttonFontFamily: Fonts.mono,
 
   // Forms
   inputHeight: 40,
@@ -93,14 +98,15 @@ const Constants = {
   h2FontSize: 30,
   h3FontSize: 24,
   h4FontSize: 18,
-  headingOpacity: 0.2,
+  headingOpacity: opacityModifier,
   headingFontWeight: 700,
-  headingTextTransform: "capitalize",
+  headingTextTransform: "uppercase",
 
   // icons
   iconSize: 30,
   iconSizeSmall: 24,
   iconSizeLarge: 36,
+  iconSizeXLarge: 42,
 };
 
 export default Constants;

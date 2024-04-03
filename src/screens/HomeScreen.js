@@ -1,11 +1,15 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
-import { H1 } from "@/ui";
+import { H1, P } from "@/ui";
+
+const title = "Welcome to Morsel";
+const subTitle = "Your Morse Code Messenger";
 
 const HomeScreen = () => {
   return (
     <View style={styles.container}>
-      <H1>Home Screen!</H1>
+      <H1 style={styles.text}>{title}</H1>
+      <P style={styles.text}>{subTitle}</P>
     </View>
   );
 };
@@ -17,8 +21,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   text: {
-    fontSize: 20,
-    fontWeight: "bold",
+    // justifyContent: "center",
   },
 });
 

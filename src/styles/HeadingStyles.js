@@ -5,7 +5,7 @@ const baseStyles = {
   fontWeight: Constants.headingFontWeight,
   marginBottom: Constants.spacingUnit * 2,
   textTransform: Constants.headingTextTransform,
-  fontFamily: Constants.fontSansSerif,
+  fontFamily: Constants.fontMono,
 };
 
 const HeadingStyles = StyleSheet.create({

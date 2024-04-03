@@ -1,11 +1,12 @@
 import React, { useState, useRef } from "react";
-import { View, StyleSheet, Pressable, Animated, ScrollView, Platform } from "react-native";
+import { View, StyleSheet, Pressable, Animated, Platform } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { useDarkMode } from "@/contexts/DarkModeContext";
-import { TextArea, H2, Hr, Select } from "@/ui";
+import { TextArea, H3, Hr, Select, PickerButton } from "@/ui";
 import { Constants } from "@/styles";
 import LocationButton from "./LocationButton";
 import SendPreset from "./SendPreset";
+import PreSetList from "./PreSetList";
 import {
   getMessages,
   saveMessages,
@@ -27,16 +28,16 @@ const Compose = () => {
   const { isDarkMode } = useDarkMode();
   const textareaRef = useRef();
 
-  const translateYValue = Platform.OS === "web" ? 356 : 250;
-  const translateYValueOpen = Platform.OS === "web" ? 240 : 0; // 135
-
   // bottom drawer
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const drawerTranslateY = useRef(new Animated.Value(translateYValue)).current;
 
   const setNewMessage = (newMessage) => {
     setMessage((prevMessage) => (prevMessage ? prevMessage + " " + newMessage : newMessage));
-    handleDrawerToggle();
+  };
+
+  const setPresetMessage = (newMessage) => {
+    setNewMessage(newMessage);
+    setDrawerOpen(false);
   };
 
   const handleSend = async () => {
@@ -70,14 +71,11 @@ const Compose = () => {
   };
 
   const handleDrawerToggle = () => {
-    const toValue = drawerOpen ? translateYValue : translateYValueOpen;
-
-    Animated.timing(drawerTranslateY, {
-      toValue: toValue,
-      duration: 300,
-      useNativeDriver: true,
-    }).start();
     setDrawerOpen(!drawerOpen);
+  };
+
+  const closeModal = () => {
+    setDrawerOpen(false);
   };
 
   return (
@@ -191,26 +189,46 @@ const Compose = () => {
         </View>
       </View>
 
+      {Platform.OS === "web" ? (
+        <View style={styles.options}>
+          <Select
+            label="Loop:"
+            selectedValue={loop}
+            onValueChange={handleLoopChange}
+            data={loopOptions}
+          />
+          <Select
+            label="Delay:"
+            selectedValue={delay}
+            onValueChange={handleDelayChange}
+            data={delayOptions}
+          />
+        </View>
+      ) : (
+        <View style={styles.options}>
+          <PickerButton
+            label="Loop"
+            selectedValue={loop}
+            onValueChange={handleLoopChange}
+            data={loopOptions}
+          />
+          <PickerButton
+            label="Delay"
+            selectedValue={delay}
+            onValueChange={handleDelayChange}
+            data={delayOptions}
+          />
+        </View>
+      )}
+
+      <Hr color={Constants.midColor} />
+
       <View style={styles.options}>
-        <Select
-          label="Loop:"
-          selectedValue={loop}
-          onValueChange={handleLoopChange}
-          data={loopOptions}
-        />
-        <Select
-          label="Delay:"
-          selectedValue={delay}
-          onValueChange={handleDelayChange}
-          data={delayOptions}
-        />
+        <SendPreset label="SOS" setNewMessage={setNewMessage} state="danger" />
+        <LocationButton setNewMessage={setNewMessage} />
       </View>
 
-      {/* <Hr color="#ddd" height={2} /> */}
-
-      <Animated.View
-        style={[styles.drawerContainer, { transform: [{ translateY: drawerTranslateY }] }]}
-      >
+      <View style={styles.presetButton}>
         <Pressable
           style={({ pressed }) => [
             pressed && styles.pressedButton,
@@ -218,45 +236,16 @@ const Compose = () => {
               flex: 1,
               alignItems: "center",
               justifyContent: "center",
-              paddingVertical: 8,
+              paddingVertical: 12,
             },
           ]}
           onPress={handleDrawerToggle}
         >
-          <H2 style={{ marginBottom: 0, flex: 1, color: Constants.darkColor }}>Preset mesages</H2>
+          <H3 style={{ marginBottom: 0, flex: 1, color: Constants.darkColor }}>Preset mesages</H3>
         </Pressable>
+      </View>
 
-        <View style={styles.drawerContent}>
-          <View>
-            <ScrollView
-              horizontal={true}
-              style={styles.scrollView}
-              showsHorizontalScrollIndicator={false}
-            >
-              <SendPreset label="SOS" setNewMessage={setNewMessage} state="danger" />
-              <LocationButton setNewMessage={setNewMessage} />
-              <SendPreset label="Medical Emergency" setNewMessage={setNewMessage} />
-              <SendPreset label="Medical Emergency" setNewMessage={setNewMessage} />
-              <SendPreset label="Medical Emergency" setNewMessage={setNewMessage} />
-              <SendPreset label="Medical Emergency" setNewMessage={setNewMessage} />
-              <SendPreset label="Medical Emergency" setNewMessage={setNewMessage} />
-              <SendPreset label="Medical Emergency" setNewMessage={setNewMessage} />
-            </ScrollView>
-          </View>
-          {/* <View>
-            <ScrollView
-              horizontal={true}
-              style={styles.scrollView}
-              showsHorizontalScrollIndicator={false}
-            >
-              <LocationButton setNewMessage={setNewMessage} />
-              <LocationButton setNewMessage={setNewMessage} />
-              <LocationButton setNewMessage={setNewMessage} />
-              <LocationButton setNewMessage={setNewMessage} />
-            </ScrollView>
-          </View> */}
-        </View>
-      </Animated.View>
+      <PreSetList visible={drawerOpen} setPresetMessage={setPresetMessage} onClose={closeModal} />
 
       {flashSelected && <Flasher torchOn={flashState} />}
     </View>
@@ -268,16 +257,12 @@ const styles = StyleSheet.create({
     padding: 0,
     width: "100%",
     gap: 16,
+    position: "static",
   },
   options: {
     flexDirection: "row",
     justifyContent: "space-between",
     gap: 16,
-  },
-  scrollView: {
-    backgroundColor: Constants.shimColor,
-    flex: 1,
-    padding: 16,
   },
   textarea: {
     textTransform: "uppercase",
@@ -308,19 +293,50 @@ const styles = StyleSheet.create({
   pressedButton: {
     opacity: 0.5,
   },
-  drawerContainer: {
+  backdrop: {
     position: "absolute",
+    top: 0,
     bottom: 0,
     left: -16,
     right: -16,
     backgroundColor: Constants.midColor,
-    overflow: "hidden",
-    paddingBottom: 20,
+  },
+  presetButton: {
+    position: "absolute",
+    bottom: Platform.OS === "web" ? -146 : -70,
+    left: -16,
+    right: -16,
+    backgroundColor: Constants.primaryColorLight,
+  },
+  drawer: {
+    // backgroundColor: Constants.primaryColor,
   },
   drawerContent: {
-    padding: 20,
-    // paddingBottom: 50,
-    gap: 16,
+    backgroundColor: Constants.shimLightColor,
+    /* height: 200,
+    overflow: "scroll", */
+    paddingBottom: 57,
+  },
+  /*  scrollView: {
+    backgroundColor: Constants.shimColor,
+    flex: 1,
+    padding: 16,
+    height: "100",
+    overflow: "scroll",
+  }, */
+  listContainer: {
+    /* padding: 16,
+    paddingBottom: 0, */
+    // maxHeight: 200,
+    //minWidth: "100%",
+    // marginBottom: 80,
+    /* borderWidth: 1,
+    borderColor: "orange",
+    borderStyle: "dashed", */
+    flex: 1,
+    paddingHorizontal: 16,
+    paddingBottom: 16,
+    maxHeight: 200,
   },
 });
 

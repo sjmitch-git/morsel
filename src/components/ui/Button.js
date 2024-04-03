@@ -61,6 +61,7 @@ const Button = ({ onPress, label, state, size = "md", disabled }) => {
           {
             color: disabled ? ButtonStyles.disabledButton.color : labelColor,
             fontSize: ButtonStyles[size].fontSize,
+            fontFamily: ButtonStyles.fontFamily,
           },
         ]}
       >

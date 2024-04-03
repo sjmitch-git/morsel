@@ -12,7 +12,8 @@ const styles = StyleSheet.create({
     width: "100%",
     maxWidth: 480,
     marginHorizontal: "auto",
-    marginTop: 32,
+    marginTop: 8,
+    position: "static",
   },
 });
 

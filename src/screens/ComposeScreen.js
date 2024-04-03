@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
     justifyContent: "start",
     alignItems: "center",
     width: "100%",
+    position: "static",
   },
 });
 

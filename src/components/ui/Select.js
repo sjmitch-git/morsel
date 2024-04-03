@@ -15,7 +15,9 @@ const Select = ({ label, selectedValue, onValueChange, data }) => {
         <Picker
           selectedValue={selectedValue}
           onValueChange={onValueChange}
-          prompt={`Select ${label}`}
+          prompt={`${label} ${
+            data.find((option) => option.value === selectedValue)?.label || selectedValue
+          }`}
           itemStyle={{ fontSize: 24 }}
           style={[
             FormsStyles.input,

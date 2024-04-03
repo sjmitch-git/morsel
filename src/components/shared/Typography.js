@@ -15,6 +15,13 @@ const AppText = ({ style, children, ...rest }) => {
       : lighten(Constants.headingOpacity, textColor);
   }
 
+  if (role === "heading") {
+    textColor = isDarkMode
+      ? darken(Constants.headingOpacity, textColor)
+      : lighten(Constants.headingOpacity, textColor);
+  }
+
+  // headingColorLight
   return (
     <Text style={[styles.appText, { color: textColor }, style]} {...rest}>
       {children}
