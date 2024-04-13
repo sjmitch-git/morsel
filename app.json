@@ -32,6 +32,14 @@
     "extra": {
       "eas": {
         "projectId": "219a9f0c-d331-404c-b5f8-3ed4d24b6702"
+      },
+      "theme": {
+        "dark": true,
+        "primary": "indigo",
+        "secondary": "blue",
+        "active": "white",
+        "inactive": "midGrey",
+        "accent": "cyan"
       }
     },
     "plugins": [
@@ -56,13 +64,6 @@
         }
       ]
     ],
-    "owner": "sjmitch",
-    "theme": {
-      "dark": true,
-      "primary": "indigo",
-      "secondary": "blue",
-      "active": "white",
-      "inactive": "midGrey"
-    }
+    "owner": "sjmitch"
   }
 }

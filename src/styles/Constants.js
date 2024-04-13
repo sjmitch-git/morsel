@@ -7,7 +7,7 @@ import ExpoConstants from "expo-constants";
 import Colors from "./Colors";
 import Fonts from "./Fonts";
 
-const theme = ExpoConstants.expoConfig.theme;
+const theme = ExpoConstants.expoConfig.extra.theme;
 const opacityModifier = Platform.OS === "web" ? 0.2 : 0.2;
 
 const Constants = {

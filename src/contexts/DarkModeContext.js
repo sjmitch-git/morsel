@@ -13,9 +13,9 @@ export const DarkModeProvider = ({ children }) => {
         const darkModePreference = await AsyncStorage.getItem("isDarkMode");
         if (darkModePreference !== null) {
           setIsDarkMode(JSON.parse(darkModePreference));
-        } else setIsDarkMode(ExpoConstants.expoConfig.theme.dark ?? false);
+        } else setIsDarkMode(ExpoConstants.expoConfig.extra.theme.dark ?? false);
       } catch (error) {
-        setIsDarkMode(ExpoConstants.expoConfig.theme.dark ?? false);
+        setIsDarkMode(ExpoConstants.expoConfig.extra.theme.dark ?? false);
       }
     };
 
