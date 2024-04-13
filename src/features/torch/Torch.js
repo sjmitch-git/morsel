@@ -60,7 +60,7 @@ const Torch = () => {
   }
 
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+    <View style={{ flex: 1, justifyContent: "start", alignItems: "center" }}>
       <Pressable onPress={handleToggleTorch}>
         <MaterialIcons
           name={torchOn ? "flashlight-on" : "flashlight-off"}

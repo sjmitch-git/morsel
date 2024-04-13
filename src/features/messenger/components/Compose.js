@@ -5,8 +5,10 @@ import { useDarkMode } from "@/contexts/DarkModeContext";
 import { TextArea, H3, Hr, Select, PickerButton } from "@/ui";
 import { Constants } from "@/styles";
 import LocationButton from "./LocationButton";
+// import AddressButton from "./AddressButton";
 import SendPreset from "./SendPreset";
 import PreSetList from "./PreSetList";
+import Sending from "./Sending";
 import {
   getMessages,
   saveMessages,
@@ -16,6 +18,7 @@ import {
 } from "@/services/messenger.service";
 import Flasher from "@/features/torch/Flasher";
 import { loopOptions, delayOptions } from "@/constants/transmitOptions";
+import { useMessageContext } from "@/contexts/MessageContext";
 
 const Compose = () => {
   const [message, setMessage] = useState("");
@@ -27,9 +30,9 @@ const Compose = () => {
   const [flashSelected, setFlashSelected] = useState(false);
   const { isDarkMode } = useDarkMode();
   const textareaRef = useRef();
-
-  // bottom drawer
-  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [presetsOpen, setPresetsOpen] = useState(false);
+  const { setSymbols, setLoadingSymbols } = useMessageContext();
+  const [progressStart, setProgressStart] = useState(false);
 
   const setNewMessage = (newMessage) => {
     setMessage((prevMessage) => (prevMessage ? prevMessage + " " + newMessage : newMessage));
@@ -37,18 +40,29 @@ const Compose = () => {
 
   const setPresetMessage = (newMessage) => {
     setNewMessage(newMessage);
-    setDrawerOpen(false);
+    setPresetsOpen(false);
   };
 
   const handleSend = async () => {
     setPlaying(true);
-    transmit(message, loop, delay, handleStop, setFlashState, audioSelected);
+    transmit(
+      message,
+      loop,
+      delay,
+      handleStop,
+      setFlashState,
+      audioSelected,
+      setSymbols,
+      setLoadingSymbols,
+      setProgressStart
+    );
     // saveSendMessage();
   };
 
   const handleStop = () => {
     stopTransmit();
     setPlaying(false);
+    setSymbols("");
   };
 
   /* const saveSendMessage = async () => {
@@ -59,7 +73,7 @@ const Compose = () => {
 
   const handleReset = () => {
     setMessage("");
-    textareaRef.current.focus();
+    //textareaRef.current.focus();
   };
 
   const handleLoopChange = (value) => {
@@ -71,18 +85,17 @@ const Compose = () => {
   };
 
   const handleDrawerToggle = () => {
-    setDrawerOpen(!drawerOpen);
+    setPresetsOpen(!presetsOpen);
   };
 
   const closeModal = () => {
-    setDrawerOpen(false);
+    setPresetsOpen(false);
   };
 
   return (
     <View style={styles.container}>
       <View style={{ position: "relative" }}>
         <TextArea
-          multiline={true}
           rows={2}
           placeholder="Type your message here!"
           value={message}
@@ -91,7 +104,7 @@ const Compose = () => {
           ref={textareaRef}
         />
         {message.length > 0 && (
-          <Pressable style={{ position: "absolute", top: 10, right: 14 }} onPress={handleReset}>
+          <Pressable style={[styles.closeButton]} onPress={handleReset}>
             <FontAwesome5
               name="times"
               size={Constants.iconSizeSmall}
@@ -115,6 +128,7 @@ const Compose = () => {
                 },
               ]}
               onPress={handleSend}
+              disabled={!message}
             >
               <FontAwesome5
                 name="play"
@@ -202,6 +216,7 @@ const Compose = () => {
             selectedValue={delay}
             onValueChange={handleDelayChange}
             data={delayOptions}
+            disabled={loop === 1}
           />
         </View>
       ) : (
@@ -217,6 +232,7 @@ const Compose = () => {
             selectedValue={delay}
             onValueChange={handleDelayChange}
             data={delayOptions}
+            disabled={loop === 1}
           />
         </View>
       )}
@@ -226,6 +242,7 @@ const Compose = () => {
       <View style={styles.options}>
         <SendPreset label="SOS" setNewMessage={setNewMessage} state="danger" />
         <LocationButton setNewMessage={setNewMessage} />
+        {/* <AddressButton setNewMessage={setNewMessage} /> */}
       </View>
 
       <View style={styles.presetButton}>
@@ -245,7 +262,17 @@ const Compose = () => {
         </Pressable>
       </View>
 
-      <PreSetList visible={drawerOpen} setPresetMessage={setPresetMessage} onClose={closeModal} />
+      <PreSetList visible={presetsOpen} setPresetMessage={setPresetMessage} onClose={closeModal} />
+
+      {playing && (
+        <Sending
+          visible={playing}
+          onClose={handleStop}
+          message={message}
+          delay={delay}
+          startProgress={progressStart}
+        />
+      )}
 
       {flashSelected && <Flasher torchOn={flashState} />}
     </View>
@@ -268,6 +295,7 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
     borderStyle: "dashed",
     borderWidth: 4,
+    height: 65,
   },
   /* input: {
     height: 40,
@@ -303,10 +331,12 @@ const styles = StyleSheet.create({
   },
   presetButton: {
     position: "absolute",
-    bottom: Platform.OS === "web" ? -146 : -70,
+    bottom: Platform.OS === "web" ? -147 : -70,
     left: -16,
     right: -16,
     backgroundColor: Constants.primaryColorLight,
+    borderTopLeftRadius: Constants.borderRadius,
+    borderTopRightRadius: Constants.borderRadius,
   },
   drawer: {
     // backgroundColor: Constants.primaryColor,
@@ -325,18 +355,26 @@ const styles = StyleSheet.create({
     overflow: "scroll",
   }, */
   listContainer: {
-    /* padding: 16,
-    paddingBottom: 0, */
-    // maxHeight: 200,
-    //minWidth: "100%",
-    // marginBottom: 80,
-    /* borderWidth: 1,
-    borderColor: "orange",
-    borderStyle: "dashed", */
     flex: 1,
     paddingHorizontal: 16,
     paddingBottom: 16,
     maxHeight: 200,
+  },
+  closeButton: {
+    position: "absolute",
+    top: -16,
+    right: 8,
+    borderWidth: 4,
+    padding: 1,
+    borderRadius: 50,
+    aspectRatio: 1,
+    width: 34,
+    //height: 32,
+    backgroundColor: Constants.focusColor,
+    borderColor: Constants.focusColor,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
 

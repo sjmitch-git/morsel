@@ -1,8 +1,15 @@
 import {
   getUserLocation,
+  getAddress,
   userLocationMessage,
   getStoredUserLocation,
   storeUserLocation,
 } from "@/utils/userLocationUtils";
 
-export { getUserLocation, userLocationMessage, getStoredUserLocation, storeUserLocation };
+export {
+  getUserLocation,
+  getAddress,
+  userLocationMessage,
+  getStoredUserLocation,
+  storeUserLocation,
+};

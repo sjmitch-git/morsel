@@ -12,7 +12,7 @@ const FormsStyles = StyleSheet.create({
     padding: Constants.spacingUnit,
   },
   inputFocus: {
-    borderColor: Constants.inputFocusColor,
+    borderColor: Constants.focusColor,
   },
 });
 

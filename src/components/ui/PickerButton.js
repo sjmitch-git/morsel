@@ -4,7 +4,7 @@ import { Picker } from "@react-native-picker/picker";
 import { useDarkMode } from "@/contexts/DarkModeContext";
 import { FormsStyles, lightTheme, darkTheme, Constants } from "@/styles";
 
-const PickerButton = ({ label, selectedValue, onValueChange, data }) => {
+const PickerButton = ({ label, selectedValue, onValueChange, data, disabled }) => {
   const { isDarkMode } = useDarkMode();
   const pickerRef = useRef();
 
@@ -14,7 +14,7 @@ const PickerButton = ({ label, selectedValue, onValueChange, data }) => {
 
   return (
     <View style={styles.wrapper}>
-      <Pressable onPress={open} style={styles.pickerContainer}>
+      <Pressable onPress={open} style={styles.pickerContainer} disabled={disabled}>
         <Text
           style={[styles.label, { color: isDarkMode ? darkTheme.textColor : lightTheme.textColor }]}
         >
@@ -28,10 +28,11 @@ const PickerButton = ({ label, selectedValue, onValueChange, data }) => {
         onValueChange={(value) => {
           onValueChange(value);
         }}
+        enabled={!disabled}
         prompt={`${label}: ${
           data.find((option) => option.value === selectedValue)?.label || selectedValue
         }`}
-        itemStyle={{ fontSize: 24 }}
+        itemStyle={{ fontSize: 24, paddingLeft: 40 }}
         style={[
           FormsStyles.input,
           styles.picker,
@@ -42,7 +43,16 @@ const PickerButton = ({ label, selectedValue, onValueChange, data }) => {
         ]}
       >
         {data.map((option) => (
-          <Picker.Item key={option.value} label={option.label} value={option.value} />
+          <Picker.Item
+            key={option.value}
+            label={option.label}
+            value={option.value}
+            style={{
+              fontSize: 20,
+              backgroundColor: option.value === selectedValue && Constants.infoColor,
+            }}
+            color={option.value === selectedValue && Constants.lightColor}
+          />
         ))}
       </Picker>
     </View>

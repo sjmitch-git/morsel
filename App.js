@@ -3,12 +3,15 @@ import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native";
 import { DarkModeProvider, useDarkMode } from "@/contexts/DarkModeContext";
+import { MessageProvider } from "@/contexts/MessageContext";
 import Navigation from "@/navigation/Navigation";
 
 const App = () => {
   return (
     <DarkModeProvider>
-      <AppContent />
+      <MessageProvider>
+        <AppContent />
+      </MessageProvider>
     </DarkModeProvider>
   );
 };

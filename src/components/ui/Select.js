@@ -5,7 +5,7 @@ import { useDarkMode } from "@/contexts/DarkModeContext";
 import { Label } from "@/ui/TextFormat";
 import { FormsStyles, lightTheme, darkTheme, Constants } from "@/styles";
 
-const Select = ({ label, selectedValue, onValueChange, data }) => {
+const Select = ({ label, selectedValue, onValueChange, data, disabled }) => {
   const { isDarkMode } = useDarkMode();
 
   return (
@@ -15,6 +15,7 @@ const Select = ({ label, selectedValue, onValueChange, data }) => {
         <Picker
           selectedValue={selectedValue}
           onValueChange={onValueChange}
+          disabled={disabled}
           prompt={`${label} ${
             data.find((option) => option.value === selectedValue)?.label || selectedValue
           }`}

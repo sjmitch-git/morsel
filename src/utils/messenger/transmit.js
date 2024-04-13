@@ -1,27 +1,41 @@
 import { Audio } from "expo-av";
 import { morseCodeEncode } from "@/utils/morseCodeUtils";
-
-const IntervalMillis = 1000;
+import {
+  dotDuration,
+  dashDuration,
+  gapDuration,
+  letterGapDuration,
+  wordGapDuration,
+  flashDotDuration,
+  flashDashDuration,
+  flashGapDuration,
+  flashLetterGapDuration,
+  flashWordGapDuration,
+} from "@/constants/transmitOptions";
 
 const dotSoundObject = new Audio.Sound();
-
 const dashSoundObject = new Audio.Sound();
 
+/* const durationModifier = 1;
 const dotDuration = 261;
 const dashDuration = 470;
-const gapDuration = dotDuration * 1.25;
-const letterGapDuration = dashDuration * 1.25;
-const wordGapDuration = gapDuration * 7;
-const durationModifier = 2;
+const gapDuration = dotDuration * durationModifier;
+const letterGapDuration = dashDuration * durationModifier;
+const wordGapDuration = gapDuration * 7; */
 
-const flashDotDuration = dotDuration * durationModifier;
-const flashDashDuration = dashDuration * durationModifier;
-const flashGapDuration = gapDuration * durationModifier;
-const flashLetterGapDuration = letterGapDuration * durationModifier;
-const flashWordGapDuration = flashGapDuration * 7;
+/* const durationFlashModifier = 2;
+const flashDotDuration = dotDuration * durationFlashModifier;
+const flashDashDuration = dashDuration * durationFlashModifier;
+const flashGapDuration = gapDuration * durationFlashModifier;
+const flashLetterGapDuration = letterGapDuration * durationFlashModifier;
+const flashWordGapDuration = flashGapDuration * 7; */
 
 let stopPlayback = false;
 let soundsLoaded = false;
+let firstPlay = true;
+
+let delayTimeout;
+let sleepTimeout;
 
 async function loadSounds() {
   try {
@@ -35,10 +49,13 @@ async function loadSounds() {
 }
 
 function sleep(duration) {
-  return new Promise((resolve) => setTimeout(resolve, duration));
+  return new Promise((resolve) => {
+    sleepTimeout = setTimeout(resolve, duration);
+  });
 }
 
-async function playSymbol(symbol, setFlashState, audioSelected) {
+async function playSymbol(symbol, setFlashState, audioSelected, setSymbols) {
+  setSymbols(symbol);
   const symbolArray = symbol.split("");
 
   for (let i = 0; i < symbolArray.length; i++) {
@@ -59,7 +76,7 @@ async function playSymbol(symbol, setFlashState, audioSelected) {
       case "-":
         if (audioSelected) {
           soundObject = dashSoundObject;
-          durationMillis = flashDashDuration;
+          durationMillis = dashDuration;
         } else {
           durationMillis = flashDashDuration;
         }
@@ -69,21 +86,6 @@ async function playSymbol(symbol, setFlashState, audioSelected) {
     }
 
     if (audioSelected) {
-      /*  await soundObject.setPositionAsync(0);
-      const playPromise = soundObject.playAsync();
-      await Promise.all([playPromise, sleep(durationMillis)]); */
-
-      /*  const status = await soundObject.getStatusAsync();
-      console.log("status", status);
-      if (status.isPlaying) {
-        await soundObject.stopAsync();
-      } */
-
-      /* await soundObject.setPositionAsync(0);
-      const playPromise = soundObject.playAsync();
-
-      await playPromise; */
-
       await soundObject.setPositionAsync(0);
 
       await new Promise((resolve) => {
@@ -110,34 +112,55 @@ async function playSymbol(symbol, setFlashState, audioSelected) {
   }
 }
 
-async function playWord(word, setFlashState, audioSelected) {
+async function playWord(word, setFlashState, audioSelected, setSymbols) {
   const symbols = word.split(" ");
 
   for (let j = 0; j < symbols.length; j++) {
     if (stopPlayback) break;
-    await playSymbol(symbols[j], setFlashState, audioSelected);
+    await playSymbol(symbols[j], setFlashState, audioSelected, setSymbols);
     if (j < symbols.length - 1) {
       if (audioSelected) {
+        setSymbols("");
         await sleep(letterGapDuration);
-      } else await sleep(flashLetterGapDuration);
+      } else {
+        setSymbols("");
+        await sleep(flashLetterGapDuration);
+      }
     }
   }
 }
 
-async function playMessage(encodedMorseCode, setFlashState, audioSelected) {
+async function playMessage(
+  encodedMorseCode,
+  setFlashState,
+  audioSelected,
+  setSymbols,
+  setLoadingSymbols
+) {
   const words = encodedMorseCode.split("   ");
+
+  setLoadingSymbols(true);
   await new Promise((resolve) => {
-    setTimeout(() => {
-      resolve();
-    }, 2000);
+    setTimeout(
+      () => {
+        setLoadingSymbols(false);
+        resolve();
+      },
+      firstPlay ? 3000 : 0
+    );
   });
+
   for (let i = 0; i < words.length; i++) {
     if (stopPlayback) break;
-    await playWord(words[i], setFlashState, audioSelected);
+    await playWord(words[i], setFlashState, audioSelected, setSymbols);
     if (i < words.length - 1) {
       if (audioSelected) {
+        setSymbols("");
         await sleep(wordGapDuration);
-      } else await sleep(flashWordGapDuration);
+      } else {
+        setSymbols("");
+        await sleep(flashWordGapDuration);
+      }
     }
   }
 }
@@ -148,13 +171,17 @@ export async function transmit(
   delay = 10000,
   stopCallback,
   setFlashState,
-  audioSelected
+  audioSelected,
+  setSymbols,
+  setLoadingSymbols,
+  setProgressStart
 ) {
   const morseCode = morseCodeEncode(text);
 
   if (!soundsLoaded && audioSelected) {
     try {
       await loadSounds();
+      setLoadingSymbols(false);
     } catch (error) {
       console.error("Error loading sounds:", error);
       return;
@@ -164,31 +191,39 @@ export async function transmit(
   stopPlayback = false;
 
   const callback = async () => {
-    if (stopPlayback) return;
+    firstPlay = false;
 
-    if (isFinite(loop) && loop > 1) {
-      loop--;
-
-      setTimeout(() => {
-        transmit(text, loop, delay, stopCallback, setFlashState, audioSelected);
-      }, delay);
-    } else if (loop === -1) {
-      try {
-        await playMessage(morseCode, setFlashState, audioSelected);
-        if (!stopPlayback) {
-          transmit(text, loop, delay, stopCallback, setFlashState, audioSelected);
-        }
-      } catch (error) {
-        console.error("Error during playMessage:", error);
-      }
-    } else if (loop === 1) {
-      stopCallback();
+    if (stopPlayback) {
+      return;
     }
+
+    if (loop > 1) {
+      loop--;
+    }
+    setProgressStart(true);
+    setSymbols("");
+    delayTimeout = setTimeout(() => {
+      transmit(
+        text,
+        loop,
+        delay,
+        stopCallback,
+        setFlashState,
+        audioSelected,
+        setSymbols,
+        setLoadingSymbols,
+        setProgressStart
+      );
+      setProgressStart(false);
+    }, delay);
   };
 
   try {
-    await playMessage(morseCode, setFlashState, audioSelected);
-    callback();
+    await playMessage(morseCode, setFlashState, audioSelected, setSymbols, setLoadingSymbols);
+    if (Number(loop) === 1) {
+      stopCallback();
+      return;
+    } else callback();
   } catch (error) {
     console.error("Error during initial playMessage:", error);
   }
@@ -196,4 +231,6 @@ export async function transmit(
 
 export function stopTransmit() {
   stopPlayback = true;
+  clearTimeout(delayTimeout);
+  clearTimeout(sleepTimeout);
 }

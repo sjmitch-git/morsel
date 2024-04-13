@@ -6,8 +6,8 @@ import Torch from "@/features/torch/Torch";
 
 const TorchScreen = () => {
   return (
-    <View style={{ flex: 1, justifyContent: "start", alignItems: "center" }}>
-      <H1>Torch</H1>
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <H1 style={{ marginBottom: 60 }}>Torch</H1>
       <Torch />
     </View>
   );
