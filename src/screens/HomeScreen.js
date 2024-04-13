@@ -2,8 +2,8 @@ import React from "react";
 import { View, StyleSheet } from "react-native";
 import { H1, P } from "@/ui";
 
-const title = "Welcome to Morsel";
-const subTitle = "Your Morse Code Messenger";
+const title = "Morsel";
+const subTitle = "Alpha Version";
 
 const HomeScreen = () => {
   return (
