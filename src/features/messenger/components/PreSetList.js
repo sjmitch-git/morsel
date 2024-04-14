@@ -1,17 +1,10 @@
 import React from "react";
-import {
-  View,
-  FlatList,
-  StyleSheet,
-  Modal,
-  Pressable,
-  TouchableWithoutFeedback,
-} from "react-native";
+import { View, FlatList, StyleSheet, Modal, TouchableWithoutFeedback } from "react-native";
+import CloseButton from "@/components/CloseButton";
 import { H3 } from "@/components/ui";
 import { Constants } from "@/styles";
 import { presetMessages } from "@/constants/presetMessages";
 import SendPreset from "./SendPreset";
-import { Ionicons } from "@expo/vector-icons";
 
 const title = "Preset Messages";
 
@@ -27,11 +20,9 @@ const PreSetList = ({ visible, setPresetMessage, onClose }) => {
       visible={visible}
       onRequestClose={handleDialogClose}
     >
-      <TouchableWithoutFeedback onPress={handleDialogClose}>
+      <TouchableWithoutFeedback>
         <View style={styles.modalView}>
-          <Pressable onPress={handleDialogClose} style={styles.closeButton}>
-            <Ionicons name="close" size={Constants.iconSizeXLarge} color="white" />
-          </Pressable>
+          <CloseButton onClose={handleDialogClose} />
           <View style={styles.dialog}>
             <View style={styles.titleContainer}>
               <H3 style={styles.title}>{title}</H3>

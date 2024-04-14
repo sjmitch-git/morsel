@@ -3,14 +3,13 @@ import {
   View,
   StyleSheet,
   Modal,
-  Pressable,
   TouchableWithoutFeedback,
   Text,
   ActivityIndicator,
 } from "react-native";
+import CloseButton from "@/components/CloseButton";
 import { H2, Progress } from "@/components/ui";
 import { Constants } from "@/styles";
-import { Ionicons } from "@expo/vector-icons";
 import { useMessageContext } from "@/contexts/MessageContext";
 import { morseCodeDecode } from "@/utils/morseCodeUtils";
 
@@ -30,10 +29,7 @@ const Sending = ({ visible, onClose, message, delay, startProgress }) => {
     >
       <TouchableWithoutFeedback onPress={handleDialogClose}>
         <View style={styles.modalView}>
-          <Pressable onPress={handleDialogClose} style={styles.closeButton}>
-            <Text style={styles.closeLabel}>Stop</Text>
-            <Ionicons name="close" size={Constants.iconSizeXLarge} color="white" />
-          </Pressable>
+          <CloseButton onClose={handleDialogClose} label={"Stop"} />
           <View style={styles.dialog}>
             <View style={styles.titleContainer}>
               <H2 style={styles.title}>"{message}"</H2>
@@ -88,20 +84,6 @@ const styles = StyleSheet.create({
   },
   item: {
     marginBottom: 8,
-  },
-  closeButton: {
-    position: "absolute",
-    top: 10,
-    right: 10,
-    padding: 8,
-    flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  closeLabel: {
-    color: Constants.lightColor,
-    textTransform: "uppercase",
-    fontSize: Constants.h4FontSize,
   },
 });
 

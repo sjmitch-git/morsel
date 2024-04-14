@@ -139,16 +139,16 @@ async function playMessage(
 ) {
   const words = encodedMorseCode.split("   ");
 
-  setLoadingSymbols(true);
-  await new Promise((resolve) => {
+  // setLoadingSymbols(true);
+  /* await new Promise((resolve) => {
     setTimeout(
       () => {
         setLoadingSymbols(false);
         resolve();
       },
-      firstPlay ? 3000 : 0
+      firstPlay ? 8000 : 800
     );
-  });
+  }); */
 
   for (let i = 0; i < words.length; i++) {
     if (stopPlayback) break;
@@ -176,12 +176,13 @@ export async function transmit(
   setLoadingSymbols,
   setProgressStart
 ) {
+  setLoadingSymbols(true);
+
   const morseCode = morseCodeEncode(text);
 
   if (!soundsLoaded && audioSelected) {
     try {
       await loadSounds();
-      setLoadingSymbols(false);
     } catch (error) {
       console.error("Error loading sounds:", error);
       return;
@@ -219,6 +220,7 @@ export async function transmit(
   };
 
   try {
+    setLoadingSymbols(false);
     await playMessage(morseCode, setFlashState, audioSelected, setSymbols, setLoadingSymbols);
     if (Number(loop) === 1) {
       stopCallback();

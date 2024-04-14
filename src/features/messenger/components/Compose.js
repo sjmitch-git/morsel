@@ -63,6 +63,7 @@ const Compose = () => {
     stopTransmit();
     setPlaying(false);
     setSymbols("");
+    setProgressStart(false);
   };
 
   /* const saveSendMessage = async () => {

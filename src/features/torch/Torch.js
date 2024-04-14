@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
-import { View, Text, Pressable } from "react-native";
+import { View, Text, Pressable, StyleSheet } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { useDarkMode } from "@/contexts/DarkModeContext";
 import { Camera } from "expo-camera";
 import { MaterialIcons } from "@expo/vector-icons";
 import { lightTheme, darkTheme } from "@/styles";
+
+const size = 120;
 
 const Torch = () => {
   const [hasPermission, setHasPermission] = useState(null);
@@ -60,11 +62,11 @@ const Torch = () => {
   }
 
   return (
-    <View style={{ flex: 1, justifyContent: "start", alignItems: "center" }}>
-      <Pressable onPress={handleToggleTorch}>
+    <View style={{ flex: 1, justifyContent: "start", alignItems: "center", height: { size } }}>
+      <Pressable onPress={handleToggleTorch} style={styles.button}>
         <MaterialIcons
           name={torchOn ? "flashlight-on" : "flashlight-off"}
-          size={120}
+          size={size}
           color={iconColor}
         />
       </Pressable>
@@ -77,3 +79,10 @@ const Torch = () => {
 };
 
 export default Torch;
+
+const styles = StyleSheet.create({
+  button: {
+    aspectRatio: 1,
+    width: size,
+  },
+});
